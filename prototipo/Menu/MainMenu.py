@@ -1,10 +1,10 @@
 import pygame
 
 class MainMenu:
-    def __init__(self, display):
+    def __init__(self, window):
         self.__buttons = []
         self.__menu_background = pygame.image.load("prototipo\Images\menu_background.jpg")
-        self.__display = display
+        self.__window = window
 
     def open_play(self):
         #play = Play()
@@ -20,5 +20,5 @@ class MainMenu:
 
     def show_main_menu(self):
         while True:
-            #display.blit(self.__menu_background, (0, 0))
+            self.__window.display.blit(self.__menu_background, (0, 0))
             pygame.display.update()

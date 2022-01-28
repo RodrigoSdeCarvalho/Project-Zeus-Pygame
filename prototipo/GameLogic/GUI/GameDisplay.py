@@ -4,7 +4,7 @@ class GameDisplay:
     def __init__(self):
         self.__width = 800
         self.__height = 600
-        self.__display = pygame.display.set_mode((self.__width, self.__height))
+        self.display = pygame.display.set_mode((self.__width, self.__height)) #Don't make this a private attribute
         #self.__display_background = pygame.transform.scale(pygame.image.load('prototipo\Images\menu_background.jpg'), (self.__width, self.__height))
 
         @property
@@ -23,6 +23,10 @@ class GameDisplay:
         def width(self, width):
             self.__width = width
 
-        @property
-        def display(self):
-            return self.__display
+        #@property
+        #def display(self):
+        #    return self.__display
+
+        #@display.setter
+        #def display(self, display):
+        #    self.__display = display
