@@ -11,10 +11,10 @@ class Game:
         self.fps = 30
         self.clock = pygame.time.Clock()
         self.window = GameDisplay()
+        self.mainMenu = MainMenu(self.window)
 
     def open_menu(self):
-        mainMenu = MainMenu(self.window)
-        mainMenu.show_main_menu()
+        self.mainMenu.show_main_menu()
 
 game = Game()
 game.open_menu()
