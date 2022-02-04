@@ -10,11 +10,11 @@ class MainMenu:
     def __init__(self, surface):
         self.window = surface
         
-        self.__buttons = [Play('Play', 300, 40, 250, 180, 5, '#614933', '#614933'),
-                          Settings('Settings', 300, 40, 250, 280, 5, '#614933', '#614933'),
-                          Help('Help', 300, 40, 250, 380, 5, '#614933', '#614933')]
+        self.__buttons = [Play('Play', 260, 40, 430, 85, 5, '#614933', '#614933'),
+                          Settings('Settings', 260, 40, 430, 170, 5, '#614933', '#614933'),
+                          Help('Help', 260, 40, 430, 255, 5, '#614933', '#614933')]
         
-        self.__menu_background = pygame.image.load("prototipo\Images\menu_background.jpg")
+        self.__menu_background = pygame.transform.scale(pygame.image.load("prototipo\Images\menu_background.png"), (800, 600))
 
     @property
     def buttons(self):
