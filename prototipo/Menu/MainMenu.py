@@ -63,7 +63,3 @@ class MainMenu:
     def buttons_draw(self):
         for button in self.buttons:
             button.draw(self.window.display)
-    
-            pygame.draw.rect(self.window.display, button.bottom_color, button.bottom_rect, border_radius = 10)
-            pygame.draw.rect(self.window.display, button.top_color, button.top_rect, border_radius = 10)
-            self.window.display.blit(button.text_surf, button.text_rect)
