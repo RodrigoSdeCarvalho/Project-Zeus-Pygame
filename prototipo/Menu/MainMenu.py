@@ -7,13 +7,13 @@ from Menu.Play import Play
 
 
 class MainMenu:
-    def __init__(self, window):
-        self.play = Play('Play', 300, 40, 250, 180, 5, '#614933', '#614933')
-        self.help = Help('Help', 300, 40, 250, 280, 5, '#614933', '#614933')
-        self.settings = Settings('Settings', 300, 40, 250, 380, 5, '#614933', '#614933')
+    def __init__(self, surface):
+        self.window = surface
         
-        self.window = window
-        self.__buttons = [self.play, self.help, self.settings]
+        self.__buttons = [Play('Play', 300, 40, 250, 180, 5, '#614933', '#614933'),
+                          Settings('Settings', 300, 40, 250, 280, 5, '#614933', '#614933'),
+                          Help('Help', 300, 40, 250, 380, 5, '#614933', '#614933')]
+        
         self.__menu_background = pygame.image.load("prototipo\Images\menu_background.jpg")
 
     @property
@@ -59,10 +59,10 @@ class MainMenu:
                     self.quit()
 
     #Alterar - alto acoplamento em relacao aos botoes
-    #Drawing and displaying of buttons
+    #Drawing and displaying buttons
     def buttons_draw(self):
         for button in self.buttons:
-            button.draw_setup()
+            button.draw(self.window.display)
     
             pygame.draw.rect(self.window.display, button.bottom_color, button.bottom_rect, border_radius = 10)
             pygame.draw.rect(self.window.display, button.top_color, button.top_rect, border_radius = 10)

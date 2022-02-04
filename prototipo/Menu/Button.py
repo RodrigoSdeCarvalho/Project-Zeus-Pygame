@@ -31,12 +31,16 @@ class Button(ABC):
         self.text_rect = self.text_rect = self.text_surf.get_rect(center = self.top_rect.center)
 
     #Calculates the button depth
-    def draw_setup(self):
+    def draw(self, surface):
         self.top_rect.y = self.original_y_pos - self.dynamic_elevation
         self.text_rect.center = self.top_rect.center 
 
         self.bottom_rect.midtop = self.top_rect.midtop
         self.bottom_rect.height = self.top_rect.height + self.dynamic_elevation
+
+        pygame.draw.rect(surface, self.bottom_color, self.bottom_rect, border_radius = 10)
+        pygame.draw.rect(surface, self.top_color, self.top_rect, border_radius = 10)
+        surface.blit(self.text_surf, self.text_rect)
 
     #Checks if there is a mouse hover, if button is pressed and released or not
     def check_click(self, mouse_pos):
