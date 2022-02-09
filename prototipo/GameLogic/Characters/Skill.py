@@ -1,9 +1,18 @@
 import pygame
 
 class Skill:
-    def __init__(self, damage: int, sprite: list):
+    def __init__(self, name: str, damage: int, sprite: list):
+        self.__name = name
         self.__damage = damage 
         self.__sprite = sprite 
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name
 
     @property
     def damage(self):
