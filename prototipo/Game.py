@@ -8,7 +8,7 @@ pygame.display.set_icon(pygame.transform.scale(pygame.image.load('prototipo/Imag
 
 class Game:
     def __init__(self):
-        fps = 30
+        fps = 60
         self.clock = pygame.time.Clock()
         self.clock.tick(fps)
         self.window = GameDisplay(self.clock)

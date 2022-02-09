@@ -8,4 +8,4 @@ class Help(Button):
         self.window = surface
 
     def onClick(self):
-        self.window.display.fill('#ffffff')
+        print('Not implemented')

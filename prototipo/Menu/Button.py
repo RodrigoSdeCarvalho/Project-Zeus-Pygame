@@ -54,8 +54,8 @@ class Button(ABC):
             else:
                 self.dynamic_elevation = self.elevation
                 if self.pressed == True:
-                    self.onClick()
                     self.pressed = False
+                    return self.onClick()
         else:
             self.dynamic_elevation = self.elevation
             self.top_color = '#A16E40'

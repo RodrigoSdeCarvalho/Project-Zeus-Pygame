@@ -33,7 +33,7 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 100,
-                                 100, 50, 50, 60, 60, 1, 150, Skill("hit", 10, ''),
+                                 100, 50, 50, 60, 60, 15, 150, Skill("hit", 10, ''),
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -130,43 +130,56 @@ class Stage:
                     pygame.quit()
                     quit()
 
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_a:
-                        left_change = 10
+                # if event.type == pygame.KEYDOWN:
+                #     if event.key == pygame.K_a:
+                #         left_change = 10
 
-                    elif event.key == pygame.K_d:
-                        right_change = 10
+                #     if event.key == pygame.K_d:
+                #         right_change = 10
 
-                    #if event.key == pygame.K_SPACE:
-                        #up_change = 150
+                #     #if event.key == pygame.K_SPACE:
+                #         #up_change = 150
 
-                    if event.key == pygame.K_LSHIFT:
-                        player.__speed = 2
+                #     if event.key == pygame.K_LSHIFT:
+                #         player.__speed = 2
 
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_a:
-                        left_change = 0
+                # if event.type == pygame.KEYUP:
+                #     if event.key == pygame.K_a:
+                #         left_change = 0
 
-                    elif event.key == pygame.K_d:
-                        right_change = 0
+                #     if event.key == pygame.K_d:
+                #         right_change = 0
 
-                    #if event.key == pygame.K_SPACE:
-                        #up_change = 0
+                #     #if event.key == pygame.K_SPACE:
+                #         #up_change = 0
 
-                    if event.key == pygame.K_LSHIFT:
-                        player.__speed = 1
+                #     if event.key == pygame.K_LSHIFT:
+                #         player.__speed = 1
 
-                x_change = player.speed * (right_change - left_change)
-                player.x_position += x_change
-                #self.y_position = up_change - down_change
+                # x_change = player.speed * (right_change - left_change)
+                # player.x_position += x_change
+                # #self.y_position = up_change - down_change
 
-                self.window.display.fill((0, 0, 0))
-                self.window.draw_scaled_image("prototipo\Images\square.png", 
-                                  player.hitbox_x, player.hitbox_y, 
-                                  player.x_position, player.y_position)
+            keys = pygame.key.get_pressed()
 
-                self.window.clock.tick(60)
-                pygame.display.update()
+            if keys[pygame.K_d]:
+                player.x_position += player.speed
+            
+            if keys[pygame.K_a]:
+                player.x_position -= player.speed
+
+            if keys[pygame.K_LSHIFT]:
+                player.speed = 20
+
+            if keys[pygame.K_SPACE]:
+                player.y_position -= 10
+
+            self.window.display.fill((0, 0, 0))
+            self.window.draw_scaled_image("prototipo\Images\square.png", 
+                                player.hitbox_x, player.hitbox_y, 
+                                player.x_position, player.y_position)
+
+            pygame.time.delay(10)
+            pygame.display.update()
 
 #Banco de dados com stage_completed (true ou false), para verificar qual a próxima fase.

@@ -28,3 +28,4 @@ class Play(Button):
             self.window.display.fill('#ffffff') #Retirar depois 
             self.current_stage()
             self.start_current_stage()
+            return False

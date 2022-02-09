@@ -14,6 +14,7 @@ class MainMenu:
                           Help('Help', 260, 40, 430, 255, 5, '#614933', '#614933', surface)]
         
         self.__menu_background = pygame.transform.scale(pygame.image.load("prototipo\Images\menu_background.png"), (800, 600))
+        self.__run = True
 
     @property
     def buttons(self):
@@ -22,6 +23,14 @@ class MainMenu:
     @property
     def menu_background(self):
         return self.__menu_background
+
+    @property
+    def run(self):
+        return self.__run
+
+    @run.setter
+    def run(self, run):
+        self.__run = run
     
     # def open_play(self):
     #     #play = Play()
@@ -46,12 +55,14 @@ class MainMenu:
 
         pygame.display.update()
 
-        while True: 
+        while self.run != False: 
             mouse_pos = pygame.mouse.get_pos()
             for button in self.buttons:
-                button.check_click(mouse_pos)
+                self.run = button.check_click(mouse_pos)
                 self.buttons_draw()
                 pygame.display.update()
+                if self.run == False:
+                    break
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
