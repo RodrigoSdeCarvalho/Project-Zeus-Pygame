@@ -45,3 +45,5 @@ class Platform:
     @color.setter
     def color(self, color):
         self.__color = color
+
+    #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px

@@ -1,7 +1,8 @@
 import pygame
-from Character import Character
-from Skill import Skill
-from Weapon import Weapon
+
+from GameLogic.Characters.Character import Character
+from GameLogic.Characters.Skill import Skill
+from GameLogic.Characters.Weapon import Weapon
 
 class Minion(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 

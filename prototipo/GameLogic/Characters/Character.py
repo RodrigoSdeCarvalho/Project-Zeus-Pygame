@@ -1,7 +1,7 @@
 import pygame
 from abc import ABC, abstractmethod
-from Skill import Skill
-from Weapon import Weapon
+from GameLogic.Characters.Skill import Skill
+from GameLogic.Characters.Weapon import Weapon
 
 class Character(ABC):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 
@@ -10,10 +10,10 @@ class Character(ABC):
                 skill: Skill = "", weapon: Weapon = ""):
         self.__name = name
         self.__sprites = sprites
-        self.__rect = self.sprites[0].get_rect()
+        #self.__rect = self.sprites[0].get_rect() #AttributeError: 'str' object has no attribute 'get_rect'
         self.__health = health
         self.__max_health = max_health
-        self.rect.center = (x_position, y_position)
+        #self.rect.center = (x_position, y_position)
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
         self.__speed = speed
@@ -37,13 +37,13 @@ class Character(ABC):
     def sprites(self, sprites):
         self.__sprites = sprites
 
-    @property
-    def rect(self):
-        return self.__rect
+    #@property
+    #def rect(self):
+    #    return self.__rect
 
-    @rect.setter
-    def rect(self, rect):
-        self.__rect = rect
+    #@rect.setter
+    #def rect(self, rect):
+    #    self.__rect = rect
 
     @property
     def health(self):
@@ -119,8 +119,8 @@ class Character(ABC):
     def move(self):
         pass
 
-    def jump(self):
-        self.rect.move_ip(0, self.jump_height)
+    #def jump(self):
+    #    self.rect.move_ip(0, self.jump_height)
 
     def take_damage(self, damage_taken):
         self.health -= damage_taken

@@ -1,32 +1,25 @@
 import pygame
 
 class GameDisplay:
-    def __init__(self):
+    def __init__(self, clock):
         self.__width = 800
         self.__height = 600
-        self.display = pygame.display.set_mode((self.__width, self.__height)) #Don't make this a private attribute
-        #self.__display_background = pygame.transform.scale(pygame.image.load('prototipo\Images\menu_background.jpg'), (self.__width, self.__height))
+        self.display = pygame.display.set_mode((self.__width, self.__height))
+        self.clock = clock
 
-        @property
-        def height(self):
-            return self.__height
+    @property
+    def width(self):
+        return self.__width
+    
+    @property 
+    def height(self):
+        return self.__height
+    
+    def draw_image(self, image, x, y):
+        img = pygame.image.load(image)
+        self.display.blit(img, (x, y))
 
-        @height.setter
-        def height(self, height):
-            self.__height = height
-
-        @property
-        def width(self):
-            return self.__width
-
-        @width.setter
-        def width(self, width):
-            self.__width = width
-
-        #@property
-        #def display(self):
-        #    return self.__display
-
-        #@display.setter
-        #def display(self, display):
-        #    self.__display = display
+    def draw_scaled_image(self, image, scale_x, scale_y, x, y):
+        img = pygame.image.load(image)
+        img = pygame.transform.scale(img, (scale_x, scale_y))
+        self.display.blit(img, (x, y))
