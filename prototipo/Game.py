@@ -8,9 +8,10 @@ pygame.display.set_icon(pygame.transform.scale(pygame.image.load('prototipo/Imag
 
 class Game:
     def __init__(self):
-        self.fps = 30
+        fps = 30
         self.clock = pygame.time.Clock()
-        self.window = GameDisplay()
+        self.clock.tick(fps)
+        self.window = GameDisplay(self.clock)
         self.mainMenu = MainMenu(self.window)
 
     def open_menu(self):
