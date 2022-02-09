@@ -1,7 +1,7 @@
 import pygame
-from Character import Character
-from Skill import Skill
-from Weapon import Weapon
+from GameLogic.Characters.Character import Character
+from GameLogic.Characters.Skill import Skill
+from GameLogic.Characters.Weapon import Weapon
 
 class Boss(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 
@@ -32,4 +32,7 @@ class Boss(Character):
         self.__weak_point_y = weak_point_y
 
     def summon_minions(self):
+        pass
+
+    def move(self):
         pass
