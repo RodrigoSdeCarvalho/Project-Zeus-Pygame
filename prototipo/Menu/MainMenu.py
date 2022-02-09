@@ -5,14 +5,13 @@ from Menu.Help import Help
 from Menu.Settings import Settings
 from Menu.Play import Play
 
-
 class MainMenu:
     def __init__(self, surface):
         self.window = surface
         
-        self.__buttons = [Play('Play', 260, 40, 430, 85, 5, '#614933', '#614933'),
-                          Settings('Settings', 260, 40, 430, 170, 5, '#614933', '#614933'),
-                          Help('Help', 260, 40, 430, 255, 5, '#614933', '#614933')]
+        self.__buttons = [Play('Play', 260, 40, 430, 85, 5, '#614933', '#614933', surface),
+                          Settings('Settings', 260, 40, 430, 170, 5, '#614933', '#614933', surface),
+                          Help('Help', 260, 40, 430, 255, 5, '#614933', '#614933', surface)]
         
         self.__menu_background = pygame.transform.scale(pygame.image.load("prototipo\Images\menu_background.png"), (800, 600))
 
