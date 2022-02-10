@@ -71,9 +71,6 @@ class Skill:
             target.health -= self.damage
 
     def move(self, target):
-        x_destination = 0
-        y_destination = 0
-
         if self.x_position < target.x_position:
             self.x_position += 3
         elif self.x_position > target.x_position:
