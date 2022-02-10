@@ -177,20 +177,23 @@ class Stage:
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_d]:
+            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
                 player.x_position += player.speed
             
-            if keys[pygame.K_a]:
+            if keys[pygame.K_a] and player.x_position >= 0:
                 player.x_position -= player.speed
                 
-            if keys[pygame.K_s]:
+            if keys[pygame.K_s] and player.y_position + player.hitbox_y <= self.window.height:
                 player.y_position += player.speed
+
+            if keys[pygame.K_w] and player.y_position >= 0:
+                player.y_position -= 5
 
             if keys[pygame.K_LSHIFT]:
                 player.speed = 10
 
-            if keys[pygame.K_SPACE]:
-                player.y_position -= 5
+            if keys[pygame.K_LSHIFT]:
+                player.speed = 10
 
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
