@@ -25,20 +25,21 @@ class Stage:
 
         self.__index = self.__level - 1
 
-        self.__skills = [] 
+        self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0), 
+                            Skill("thunder", 100, '', 0, 0, 20, 20)] 
 
         self.__weapons = []
 
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 150, Skill("hit", 10, '', Player.x_position, Player.y_position),
+                                 1000, 0, 540, 60, 60, 5, 150, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
-                     1000, 120, 72, 120, 72, 1, 150, Skill("thunder", 10, '', Boss.x_position, Boss.y_position),
+                     1000, 120, 72, 120, 72, 1, 150, self.skills[1],
                      Weapon(10, ''), 20, 60)]
 
         self.__platforms = [Platform(0, 0, 600, 1, (0, 0, 0))]
@@ -106,6 +107,7 @@ class Stage:
     #                           object.hitbox_x, object.hitbox_y, 
     #                           object.x_position, object.y_position)
 
+    #alterar
     def draw_player(self, object):
         self.window.draw_scaled_image("prototipo\Images\square.png", 
                     object.hitbox_x, object.hitbox_y, 
@@ -115,6 +117,11 @@ class Stage:
         self.window.draw_scaled_image("prototipo\Images\qlue.png", 
                 object.hitbox_x, object.hitbox_y, 
                 object.x_position, object.y_position)
+
+    def draw_skill(self, object, x, y):
+        self.window.draw_scaled_image("prototipo\Images\white.jpg",
+                object.hitbox_x, object.hitbox_y,
+                x, y)
     
     def write_on_display(self,text, size, pos):
         largeText = pygame.font.Font('freesansbold.ttf', size)
@@ -154,7 +161,6 @@ class Stage:
         return True
 
 
-
     def start(self):
         index = self.index
         player = self.players[index]
@@ -169,6 +175,8 @@ class Stage:
         pygame.display.update()
 
         clock = 0
+        boss_skill_run = True
+        
         while play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -187,7 +195,7 @@ class Stage:
                 player.y_position += player.speed
 
             if keys[pygame.K_w] and player.y_position >= 0:
-                player.y_position -= 5
+                player.y_position -= player.speed
 
             if keys[pygame.K_LSHIFT]:
                 player.speed = 10
@@ -198,22 +206,30 @@ class Stage:
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
                     player.skill.attack(boss)
-                    
-            #if clock % (60 * 8):
-                #thunder = True
-                #self.window.draw_scaled_image("prototipo\Images\shunder.png", 10, 15, boss.x_position, boss.y_position)
-                
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])
             self.status(player, [0,0])
 
             if boss.health > 0:
-                self.draw_boss(boss)
+                self.draw_boss(boss) 
+                if player.health > 0:
+                    if clock % (60 * 3) and boss_skill_run == True:
+                        self.draw_skill(boss.skill, boss.skill.x_position, boss.skill.y_position)
+                        boss.skill.move(player)
+                        if self.collision(boss.skill, player):
+                            boss.skill.attack(player)
+                            boss_skill_run = False
+                    else:  
+                        boss_skill_run = True
+                        clock = 0
+                        boss.skill.x_position = boss.x_position
+                        boss.skill.y_position = boss.y_position + boss.hitbox_y
+                            
 
             if player.health > 0:    
                 self.draw_player(player)
-            
+
             clock += 1
             pygame.time.delay(10)
             pygame.display.update()

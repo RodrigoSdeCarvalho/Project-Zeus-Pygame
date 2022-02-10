@@ -1,12 +1,14 @@
 import pygame
 
 class Skill:
-    def __init__(self, name: str, damage: int, sprite: list, x_position, y_position):
+    def __init__(self, name: str, damage: int, sprite: list, x_position, y_position, hitbox_x, hitbox_y):
         self.__name = name
         self.__damage = damage 
         self.__sprite = sprite 
         self.__x_position = x_position
         self.__y_position = y_position
+        self.__hitbox_x = hitbox_x
+        self.__hitbox_y = hitbox_y
 
     @property
     def name(self):
@@ -48,9 +50,36 @@ class Skill:
     def y_position(self, y_position):
         self.__y_position = y_position
 
+    @property
+    def hitbox_x(self):
+        return self.__hitbox_x
+    
+    @hitbox_x.setter
+    def hitbox_x(self, hitbox_x):
+        self.__hitbox_x = hitbox_x
+
+    @property
+    def hitbox_y(self):
+        return self.__hitbox_y
+    
+    @hitbox_y.setter
+    def hitbox_y(self, hitbox_y):
+        self.__hitbox_y = hitbox_y
+
     def attack(self, target):
         if target.health > 0:
             target.health -= self.damage
 
-    def thunder(self, target):
-        pass
+    def move(self, target):
+        x_destination = 0
+        y_destination = 0
+
+        if self.x_position < target.x_position:
+            self.x_position += 3
+        elif self.x_position > target.x_position:
+            self.x_position -= 3
+
+        if self.y_position < target.y_position:
+            self.y_position += 3
+        elif self.y_position > target.y_position:
+            self.y_position -= 3

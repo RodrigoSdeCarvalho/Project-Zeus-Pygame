@@ -19,6 +19,7 @@ class Boss(Character):
         self.__speed = speed
         self.__jump_height = jump_height
         self.__sprites = sprites
+    
     @property
     def x_position(self):
         return self.__x_position
