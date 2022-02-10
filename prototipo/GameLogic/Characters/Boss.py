@@ -57,6 +57,6 @@ class Boss(Character):
 
     def summon_minions(self):
         pass
-
+    
     def move(self):
         pass

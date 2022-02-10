@@ -21,6 +21,11 @@ class Player(Character):
         self.__jump_height = jump_height
         self.__sprites = sprites
         self.window = surface
+        self.__max_health = max_health
+
+    @property
+    def max_health(self):
+        return self.__max_health
 
     @property
     def stamina(self):

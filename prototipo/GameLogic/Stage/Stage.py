@@ -31,14 +31,14 @@ class Stage:
 
         self.__minions = []
 
-        self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 100,
-                                 100, 0, 0, 60, 60, 5, 150, Skill("hit", 10, ''),
+        self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
+                                 1000, 0, 540, 60, 60, 5, 150, Skill("hit", 10, '', Player.x_position, Player.y_position),
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
-        self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 100,
-                     100, 120, 72, 120, 72, 1, 150, Skill("hitm", 10, ''),
+        self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
+                     1000, 120, 72, 120, 72, 1, 150, Skill("thunder", 10, '', Boss.x_position, Boss.y_position),
                      Weapon(10, ''), 20, 60)]
 
         self.__platforms = [Platform(0, 0, 600, 1, (0, 0, 0))]
@@ -115,6 +115,18 @@ class Stage:
         self.window.draw_scaled_image("prototipo\Images\qlue.png", 
                 object.hitbox_x, object.hitbox_y, 
                 object.x_position, object.y_position)
+    
+    def write_on_display(self,text, size, pos):
+        largeText = pygame.font.Font('freesansbold.ttf', size)
+        TextSurf = largeText.render(text, True, (0,0,0))
+        TextRect = TextSurf.get_rect()
+        TextRect.center = ((pos[0], pos[1]))
+        self.window.display.blit(TextSurf, TextRect)
+
+    def status(self, object, pos:list):
+        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/10, 10])
+        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/10, 10])
+        self.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 45, pos[1] +5])
 
     def collision(self, object_1, object_2):
         top_left_x_1 = object_1.x_position
@@ -141,6 +153,8 @@ class Stage:
 
         return True
 
+
+
     def start(self):
         index = self.index
         player = self.players[index]
@@ -151,8 +165,10 @@ class Stage:
         map = self.maps[index]
 
         play = True
+        #thunder = False
         pygame.display.update()
 
+        clock = 0
         while play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -176,12 +192,26 @@ class Stage:
             if keys[pygame.K_SPACE]:
                 player.y_position -= 5
 
-            self.collision(player, boss)
-
+            if keys[pygame.K_e]:
+                if self.collision(player, boss):
+                    player.skill.attack(boss)
+                    
+            #if clock % (60 * 8):
+                #thunder = True
+                #self.window.draw_scaled_image("prototipo\Images\shunder.png", 10, 15, boss.x_position, boss.y_position)
+                
+            
             self.window.display.fill((0, 0, 0))
-            self.draw_boss(boss)
-            self.draw_player(player)
+            self.status(boss, [700, 0])
+            self.status(player, [0,0])
 
+            if boss.health > 0:
+                self.draw_boss(boss)
+
+            if player.health > 0:    
+                self.draw_player(player)
+            
+            clock += 1
             pygame.time.delay(10)
             pygame.display.update()
 
