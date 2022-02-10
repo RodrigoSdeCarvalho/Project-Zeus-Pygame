@@ -1,6 +1,5 @@
 import pygame
 
-from platform import platform
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
@@ -33,13 +32,13 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 100,
-                                 100, 50, 50, 60, 60, 15, 150, Skill("hit", 10, ''),
+                                 100, 0, 0, 60, 60, 5, 150, Skill("hit", 10, ''),
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 100,
-                     100, 40, 72, 40, 72, 1, 150, Skill("hitm", 10, ''),
+                     100, 120, 72, 120, 72, 1, 150, Skill("hitm", 10, ''),
                      Weapon(10, ''), 20, 60)]
 
         self.__platforms = [Platform(0, 0, 600, 1, (0, 0, 0))]
@@ -102,26 +101,56 @@ class Stage:
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
    
-    # def draw_player(self):
-    #     self.window.draw_scaled_image("prototipo\Images\square.png", 
-    #                           player.hitbox_x, player.hitbox_y, 
-    #                           player.x_position, player.y_position)
+    # def draw_object(self, object):
+    #     self.window.draw_scaled_image(object.sprites[0], 
+    #                           object.hitbox_x, object.hitbox_y, 
+    #                           object.x_position, object.y_position)
+
+    def draw_player(self, object):
+        self.window.draw_scaled_image("prototipo\Images\square.png", 
+                    object.hitbox_x, object.hitbox_y, 
+                    object.x_position, object.y_position)
+
+    def draw_boss(self, object):
+        self.window.draw_scaled_image("prototipo\Images\qlue.png", 
+                object.hitbox_x, object.hitbox_y, 
+                object.x_position, object.y_position)
+
+    def collision(self, object_1, object_2):
+        top_left_x_1 = object_1.x_position
+        top_left_y_1 = object_1.y_position
+        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
+        top_right_x_1 = object_1.x_position + object_1.hitbox_x
+
+        top_left_x_2 = object_2.x_position
+        top_left_y_2 = object_2.y_position
+        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
+        top_right_x_2 = object_2.x_position + object_2.hitbox_x
+
+        if bottom_left_y_1 <= top_left_y_2:
+            return False
+        
+        if top_left_y_1 >= bottom_left_y_2 :
+            return False
+
+        if top_right_x_1 <= top_left_x_2:
+            return False
+
+        if top_left_x_1 >= top_right_x_2:
+            return False
+
+        return True
 
     def start(self):
         index = self.index
         player = self.players[index]
-        #boss = self.bosses[index]
+        boss = self.bosses[index]
         #skill = self.skills[index]
         #weapon = self.weapons[index]
         #minion = self.minion[index]
         map = self.maps[index]
 
         play = True
-        right_change = 0
-        left_change = 0
-        up_change = 0
-        down_change = 0
-
         pygame.display.update()
 
         while play:
@@ -130,36 +159,6 @@ class Stage:
                     pygame.quit()
                     quit()
 
-                # if event.type == pygame.KEYDOWN:
-                #     if event.key == pygame.K_a:
-                #         left_change = 10
-
-                #     if event.key == pygame.K_d:
-                #         right_change = 10
-
-                #     #if event.key == pygame.K_SPACE:
-                #         #up_change = 150
-
-                #     if event.key == pygame.K_LSHIFT:
-                #         player.__speed = 2
-
-                # if event.type == pygame.KEYUP:
-                #     if event.key == pygame.K_a:
-                #         left_change = 0
-
-                #     if event.key == pygame.K_d:
-                #         right_change = 0
-
-                #     #if event.key == pygame.K_SPACE:
-                #         #up_change = 0
-
-                #     if event.key == pygame.K_LSHIFT:
-                #         player.__speed = 1
-
-                # x_change = player.speed * (right_change - left_change)
-                # player.x_position += x_change
-                # #self.y_position = up_change - down_change
-
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_d]:
@@ -167,17 +166,21 @@ class Stage:
             
             if keys[pygame.K_a]:
                 player.x_position -= player.speed
+                
+            if keys[pygame.K_s]:
+                player.y_position += player.speed
 
             if keys[pygame.K_LSHIFT]:
-                player.speed = 20
+                player.speed = 10
 
             if keys[pygame.K_SPACE]:
-                player.y_position -= 10
+                player.y_position -= 5
+
+            self.collision(player, boss)
 
             self.window.display.fill((0, 0, 0))
-            self.window.draw_scaled_image("prototipo\Images\square.png", 
-                                player.hitbox_x, player.hitbox_y, 
-                                player.x_position, player.y_position)
+            self.draw_boss(boss)
+            self.draw_player(player)
 
             pygame.time.delay(10)
             pygame.display.update()

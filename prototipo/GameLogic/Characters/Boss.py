@@ -14,6 +14,26 @@ class Boss(Character):
                         skill, weapon)
         self.__weak_point_x: weak_point_x
         self.__weak_point_y: weak_point_y
+        self.__x_position = x_position
+        self.__y_position = y_position
+        self.__speed = speed
+        self.__jump_height = jump_height
+        self.__sprites = sprites
+    @property
+    def x_position(self):
+        return self.__x_position
+    
+    @x_position.setter
+    def x_position(self, x_position):
+        self.__x_position = x_position
+
+    @property
+    def y_position(self):
+        return self.__y_position
+
+    @y_position.setter
+    def y_position(self, y_position):
+        self.__y_position = y_position
 
     @property
     def weak_point_x(self):
@@ -30,6 +50,10 @@ class Boss(Character):
     @weak_point_y.setter
     def weak_point_y(self, weak_point_y):
         self.__weak_point_y = weak_point_y
+        
+    @property
+    def sprites(self):
+        return self.__sprites
 
     def summon_minions(self):
         pass

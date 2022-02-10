@@ -19,6 +19,7 @@ class Player(Character):
         self.__y_position = y_position
         self.__speed = speed
         self.__jump_height = jump_height
+        self.__sprites = sprites
         self.window = surface
 
     @property
@@ -76,6 +77,10 @@ class Player(Character):
     @jump_height.setter
     def jump_height(self, jump_height):
         self.__jump_height = jump_height
+        
+    @property
+    def sprites(self):
+        return self.__sprites
 
     '''
     def move(self):
