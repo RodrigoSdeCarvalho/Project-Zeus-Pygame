@@ -200,8 +200,8 @@ class Stage:
             if keys[pygame.K_LSHIFT]:
                 player.speed = 10
 
-            if keys[pygame.K_LSHIFT]:
-                player.speed = 10
+            if not keys[pygame.K_LSHIFT]:
+                player.speed = 5
 
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
