@@ -33,7 +33,7 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 150, self.skills[0],
+                                 1000, 0, 540, 60, 60, 5, 13, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -160,7 +160,6 @@ class Stage:
 
         return True
 
-
     def start(self):
         index = self.index
         player = self.players[index]
@@ -176,13 +175,14 @@ class Stage:
 
         clock = 0
         boss_skill_run = True
-        
+        jumping = False
+
         while play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-
+            
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
@@ -190,15 +190,6 @@ class Stage:
             
             if keys[pygame.K_a] and player.x_position >= 0:
                 player.x_position -= player.speed
-                
-            if keys[pygame.K_s] and player.y_position + player.hitbox_y <= self.window.height:
-                player.y_position += player.speed
-
-            if keys[pygame.K_w] and player.y_position >= 0:
-                player.y_position -= player.speed
-
-            if keys[pygame.K_LSHIFT]:
-                player.speed = 10
 
             if keys[pygame.K_LSHIFT]:
                 player.speed = 10
@@ -206,6 +197,16 @@ class Stage:
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
                     player.skill.attack(boss)
+
+            if not (jumping):
+                if keys[pygame.K_SPACE] and player.y_position >= 0:
+                    jumping = True
+            else:
+                finished = player.jump()
+
+                if finished:
+                    jumping = False
+
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])

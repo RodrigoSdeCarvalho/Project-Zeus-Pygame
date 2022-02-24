@@ -19,6 +19,7 @@ class Player(Character):
         self.__y_position = y_position
         self.__speed = speed
         self.__jump_height = jump_height
+        self.__max_jump_height = jump_height
         self.__sprites = sprites
         self.window = surface
         self.__max_health = max_health
@@ -82,6 +83,14 @@ class Player(Character):
     @jump_height.setter
     def jump_height(self, jump_height):
         self.__jump_height = jump_height
+
+    @property
+    def max_jump_height(self):
+        return self.__max_jump_height
+
+    @max_jump_height.setter
+    def max_jump_height(self, jump_height):
+        self.__max_jump_height = jump_height
         
     @property
     def sprites(self):
@@ -161,3 +170,11 @@ class Player(Character):
                                   self.hitbox_x, self.hitbox_y, 
                                   self.x_position, self.y_position)
 '''
+
+    def jump(self):     
+        if self.jump_height >= (-1) * self.max_jump_height:
+            self.y_position -= (self.jump_height * abs(self.jump_height)) / 2
+            self.jump_height -= 1
+        else:
+            self.jump_height = self.max_jump_height
+            return True
