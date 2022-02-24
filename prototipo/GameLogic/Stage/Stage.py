@@ -1,3 +1,4 @@
+from re import L
 import pygame
 
 from GameLogic.Characters.Player import Player
@@ -186,25 +187,27 @@ class Stage:
             
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
-                player.x_position += player.speed
+            if keys[pygame.K_d]:
+                player.move_right()
             
-            if keys[pygame.K_a] and player.x_position >= 0:
-                player.x_position -= player.speed
+            if keys[pygame.K_a]:
+                player.move_left()
 
             if keys[pygame.K_LSHIFT]:
-                player.speed = 10
+                player.increase_speed()
+            
+            if not keys[pygame.K_LSHIFT]:
+                player.decrease_speed()
 
             if keys[pygame.K_e]:
-                if self.collision(player, boss) and player.health > 0:
-                    player.skill.attack(boss)
+                if self.collision(player, boss):
+                    player.skill_attack(boss)
 
-            if not (jumping):
-                if keys[pygame.K_SPACE] and player.y_position >= 0:
+            if not jumping:
+                if keys[pygame.K_SPACE]:
                     jumping = True
             else:
                 finished = player.jump()
-
                 if finished:
                     jumping = False
 
