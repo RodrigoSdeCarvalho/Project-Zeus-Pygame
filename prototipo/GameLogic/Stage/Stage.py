@@ -212,6 +212,7 @@ class Stage:
             self.status(player, [0,0])
 
             if boss.health > 0:
+                boss.move()
                 self.draw_boss(boss) 
                 if player.health > 0:
                     if clock % (60 * 3) and boss_skill_run == True:

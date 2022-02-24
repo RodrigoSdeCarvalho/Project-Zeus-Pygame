@@ -19,6 +19,7 @@ class Boss(Character):
         self.__speed = speed
         self.__jump_height = jump_height
         self.__sprites = sprites
+        self.__counter = 0
     
     @property
     def x_position(self):
@@ -56,8 +57,25 @@ class Boss(Character):
     def sprites(self):
         return self.__sprites
 
+    @property
+    def counter(self):
+        return self.__counter
+    
+    @counter.setter
+    def counter(self, counter):
+        self.__counter = counter
+
     def summon_minions(self):
         pass
     
     def move(self):
-        pass
+        distance = 400
+
+        if self.counter >= 0 and self.counter <= distance:
+            self.x_position += self.speed
+        elif self.counter >= distance and self.counter <= distance*2:
+            self.x_position -= self.speed
+        else:
+            self.counter = 0
+
+        self.counter += 1
