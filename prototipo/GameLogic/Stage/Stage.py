@@ -8,7 +8,6 @@ from GameLogic.Characters.Weapon import Weapon
 from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
 from GameLogic.Stage.Map import Map
-from time import sleep
 
 #O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
 #fase tem esses objetos diferentes.
@@ -223,11 +222,10 @@ class Stage:
                         self.draw_skill(boss.skill, boss.skill.x_position, boss.skill.y_position)
                         boss.skill.move(player)
                         if self.collision(boss.skill, player):
-                            boss.skill.attack(player)
+                            boss.skill_attack(player)
                             boss_skill_run = False
                     else:
-                        boss.skill.x_position = boss.x_position
-                        boss.skill.y_position = boss.y_position + boss.hitbox_y
+                        boss.skill_reset()
                         
                         if clock % (60) == 0:  
                             clock = 0

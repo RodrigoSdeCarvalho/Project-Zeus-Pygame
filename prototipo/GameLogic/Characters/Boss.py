@@ -61,3 +61,6 @@ class Boss(Character):
     
     def move(self):
         pass
+
+    def skill_reset(self):
+        self.skill.reset(self.x_position, self.y_position + self.hitbox_y)
