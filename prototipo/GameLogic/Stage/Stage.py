@@ -7,6 +7,7 @@ from GameLogic.Characters.Weapon import Weapon
 from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
 from GameLogic.Stage.Map import Map
+from time import sleep
 
 #O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
 #fase tem esses objetos diferentes.
@@ -26,14 +27,14 @@ class Stage:
         self.__index = self.__level - 1
 
         self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0), 
-                            Skill("thunder", 100, '', 0, 0, 20, 20)] 
+                            Skill("thunder", 200, '', 0, 0, 20, 20)] 
 
         self.__weapons = []
 
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 13, self.skills[0],
+                                 1000, 0, 540, 60, 60, 5, 14, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -195,7 +196,7 @@ class Stage:
                 player.speed = 10
 
             if keys[pygame.K_e]:
-                if self.collision(player, boss):
+                if self.collision(player, boss) and player.health > 0:
                     player.skill.attack(boss)
 
             if not (jumping):
@@ -215,18 +216,19 @@ class Stage:
             if boss.health > 0:
                 self.draw_boss(boss) 
                 if player.health > 0:
-                    if clock % (60 * 3) and boss_skill_run == True:
+                    if boss_skill_run and clock % (60 * 4):
                         self.draw_skill(boss.skill, boss.skill.x_position, boss.skill.y_position)
                         boss.skill.move(player)
                         if self.collision(boss.skill, player):
                             boss.skill.attack(player)
                             boss_skill_run = False
-                    else:  
-                        boss_skill_run = True
-                        clock = 0
+                    else:
                         boss.skill.x_position = boss.x_position
                         boss.skill.y_position = boss.y_position + boss.hitbox_y
-                            
+                        
+                        if clock % (60) == 0:  
+                            clock = 0
+                            boss_skill_run = True                         
 
             if player.health > 0:    
                 self.draw_player(player)
