@@ -48,7 +48,7 @@ class MainMenu:
         pygame.quit()
         quit()
 
-    #Loop that displays the menu with a background, buttons and deals with button presses
+    #Loop that displays the menu with a background, buttons and deals with button pressing
     def show_main_menu(self):
         self.window.display.blit(self.menu_background, (0, 0))
         self.buttons_draw()
@@ -68,7 +68,6 @@ class MainMenu:
                 if event.type == pygame.QUIT:
                     self.quit()
 
-    #Alterar - alto acoplamento em relacao aos botoes
     #Drawing and displaying buttons
     def buttons_draw(self):
         for button in self.buttons:

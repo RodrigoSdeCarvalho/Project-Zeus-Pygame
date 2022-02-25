@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from platform import platform
+=======
+from re import L
+>>>>>>> Stephan
 import pygame
 
 from GameLogic.Characters.Player import Player
@@ -27,14 +31,14 @@ class Stage:
         self.__index = self.__level - 1
 
         self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0), 
-                            Skill("thunder", 100, '', 0, 0, 20, 20)] 
+                            Skill("thunder", 200, '', 0, 0, 20, 20)] 
 
         self.__weapons = []
 
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 150, self.skills[0],
+                                 1000, 0, 540, 60, 60, 5, 14, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -162,6 +166,7 @@ class Stage:
 
         return True
 
+<<<<<<< HEAD
     def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
         top_left_x_1 = object_1.x_position
         top_left_y_1 = object_1.y_position
@@ -187,6 +192,8 @@ class Stage:
         
     
 
+=======
+>>>>>>> Stephan
     def start(self):
         index = self.index
         player = self.players[index]
@@ -203,35 +210,52 @@ class Stage:
 
         clock = 0
         boss_skill_run = True
-        
+        jumping = False
+
         while play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-
+            
             keys = pygame.key.get_pressed()
+<<<<<<< HEAD
             if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
                 player.x_position += player.speed
-            
-            if keys[pygame.K_a] and player.x_position >= 0:
-                player.x_position -= player.speed
-                
-            if keys[pygame.K_s] and player.y_position + player.hitbox_y <= self.window.height:
-                player.y_position += player.speed
+=======
 
-            if keys[pygame.K_w] and player.y_position >= 0:
-                player.y_position -= player.speed
+            if keys[pygame.K_d]:
+                player.move_right()
+>>>>>>> Stephan
+            
+            if keys[pygame.K_a]:
+                player.move_left()
 
             if keys[pygame.K_LSHIFT]:
+<<<<<<< HEAD
                 player.speed = 10
 
             if not keys[pygame.K_LSHIFT]:
                 player.speed = 5
+=======
+                player.increase_speed()
+            
+            if not keys[pygame.K_LSHIFT]:
+                player.decrease_speed()
+>>>>>>> Stephan
 
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
-                    player.skill.attack(boss)
+                    player.skill_attack(boss)
+
+            if not jumping:
+                if keys[pygame.K_SPACE]:
+                    jumping = True
+            else:
+                finished = player.jump()
+                if finished:
+                    jumping = False
+
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])
@@ -243,18 +267,18 @@ class Stage:
             if boss.health > 0:
                 self.draw_boss(boss) 
                 if player.health > 0:
-                    if clock % (60 * 3) and boss_skill_run == True:
+                    if boss_skill_run and clock % (60 * 4):
                         self.draw_skill(boss.skill, boss.skill.x_position, boss.skill.y_position)
                         boss.skill.move(player)
                         if self.collision(boss.skill, player):
-                            boss.skill.attack(player)
+                            boss.skill_attack(player)
                             boss_skill_run = False
-                    else:  
-                        boss_skill_run = True
-                        clock = 0
-                        boss.skill.x_position = boss.x_position
-                        boss.skill.y_position = boss.y_position + boss.hitbox_y
-                            
+                    else:
+                        boss.skill_reset()
+                        
+                        if clock % (60) == 0:  
+                            clock = 0
+                            boss_skill_run = True                         
 
             if player.health > 0:    
                 self.draw_player(player)
