@@ -1,3 +1,4 @@
+from platform import platform
 import pygame
 
 from GameLogic.Characters.Player import Player
@@ -39,10 +40,11 @@ class Stage:
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
-                     1000, 120, 72, 120, 72, 1, 150, self.skills[1],
+                     1000, 200, 72, 120, 72, 1, 150, self.skills[1],
                      Weapon(10, ''), 20, 60)]
 
-        self.__platforms = [Platform(0, 0, 600, 1, (0, 0, 0))]
+        self.__platforms = [Platform(80, 350, 250, 130 , "prototipo\Images\platform.png", 250, 130, "white", surface),
+                            Platform(470, 350, 250, 130 , "prototipo\Images\platform.png", 250, 130, "white", surface)]
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
 
@@ -160,6 +162,30 @@ class Stage:
 
         return True
 
+    def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
+        top_left_x_1 = object_1.x_position
+        top_left_y_1 = object_1.y_position
+        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
+        top_right_x_1 = object_1.x_position + object_1.hitbox_x
+
+        top_left_x_2 = object_2.x_position
+        top_left_y_2 = object_2.y_position
+        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
+        top_right_x_2 = object_2.x_position + object_2.hitbox_x      
+
+        if bottom_left_y_1 > top_left_y_2: #Player above Platform
+            
+        
+        if top_left_y_1 >= bottom_left_y_2 :
+            return False
+
+        if top_right_x_1 <= top_left_x_2:
+            return False
+
+        if top_left_x_1 >= top_right_x_2:
+            return False
+        
+    
 
     def start(self):
         index = self.index
@@ -168,6 +194,7 @@ class Stage:
         #skill = self.skills[index]
         #weapon = self.weapons[index]
         #minion = self.minion[index]
+        platforms = self.platforms
         map = self.maps[index]
 
         play = True
@@ -184,8 +211,9 @@ class Stage:
                     quit()
 
             keys = pygame.key.get_pressed()
+            sides_can_move= {"up": True, "down": True, "left": True, "right": True}
 
-            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
+            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width and sides_can_move[]:
                 player.x_position += player.speed
             
             if keys[pygame.K_a] and player.x_position >= 0:
@@ -211,6 +239,9 @@ class Stage:
             self.status(boss, [700, 0])
             self.status(player, [0,0])
 
+            for platform in platforms:
+                platform.draw() 
+
             if boss.health > 0:
                 self.draw_boss(boss) 
                 if player.health > 0:
@@ -231,7 +262,7 @@ class Stage:
                 self.draw_player(player)
 
             clock += 1
-            pygame.time.delay(10)
+            pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
 
 #Banco de dados com stage_completed (true ou false), para verificar qual a próxima fase.
