@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from platform import platform
-=======
 from re import L
->>>>>>> Stephan
 import pygame
 
 from GameLogic.Characters.Player import Player
@@ -166,7 +162,6 @@ class Stage:
 
         return True
 
-<<<<<<< HEAD
     def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
         top_left_x_1 = object_1.x_position
         top_left_y_1 = object_1.y_position
@@ -178,23 +173,27 @@ class Stage:
         bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
         top_right_x_2 = object_2.x_position + object_2.hitbox_x      
 
-        #if bottom_left_y_1 > top_left_y_2: #Player above Platform
-            
-        
-        if top_left_y_1 >= bottom_left_y_2 :
-            return False
+        if bottom_left_y_1 > top_left_y_2: #Player above platform
+            platform_collision_sides["up"] = True
+            return
 
-        if top_right_x_1 <= top_left_x_2:
-            return False
+        if top_left_y_1 < bottom_left_y_2 : #Player below platform
+            platform_collision_sides["down"] = True
+            return
 
-        if top_left_x_1 >= top_right_x_2:
-            return False
-        
-    
+        if top_right_x_1 > top_left_x_2: #Player on the left of the platform
+            platform_collision_sides["left"] = True
+            return
 
-=======
->>>>>>> Stephan
+        if top_left_x_1 < top_right_x_2: #Player on the right of the platform
+            platform_collision_sides["right"] = True
+            return
+
+        return
+
     def start(self):
+        global platform_collision_sides
+
         index = self.index
         player = self.players[index]
         boss = self.bosses[index]
@@ -219,30 +218,24 @@ class Stage:
                     quit()
             
             keys = pygame.key.get_pressed()
-<<<<<<< HEAD
-            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
-                player.x_position += player.speed
-=======
 
-            if keys[pygame.K_d]:
-                player.move_right()
->>>>>>> Stephan
+            platform_collision_sides = {"up": False, "down": False, "left": False, "right": False}
             
-            if keys[pygame.K_a]:
+            if self.collision(player, platforms[0]) or self.collision(player, platforms[1]):
+                for platform in platforms:
+                     self.platform_collision(player, platform)
+
+            if keys[pygame.K_d] and platform_collision_sides["left"] == False:
+                player.move_right()
+
+            if keys[pygame.K_a] and platform_collision_sides["right"] == False:
                 player.move_left()
 
             if keys[pygame.K_LSHIFT]:
-<<<<<<< HEAD
-                player.speed = 10
-
-            if not keys[pygame.K_LSHIFT]:
-                player.speed = 5
-=======
                 player.increase_speed()
             
             if not keys[pygame.K_LSHIFT]:
                 player.decrease_speed()
->>>>>>> Stephan
 
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
@@ -251,7 +244,7 @@ class Stage:
             if not jumping:
                 if keys[pygame.K_SPACE]:
                     jumping = True
-            else:
+            elif platform_collision_sides["up"] == False:
                 finished = player.jump()
                 if finished:
                     jumping = False
