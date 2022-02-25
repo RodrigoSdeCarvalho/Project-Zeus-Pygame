@@ -258,6 +258,7 @@ class Stage:
                 platform.draw() 
 
             if boss.health > 0:
+                boss.move()
                 self.draw_boss(boss) 
                 if player.health > 0:
                     if boss_skill_run and clock % (60 * 4):
