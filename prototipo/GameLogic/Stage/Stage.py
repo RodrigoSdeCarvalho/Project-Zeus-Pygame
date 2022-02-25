@@ -173,7 +173,7 @@ class Stage:
         bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
         top_right_x_2 = object_2.x_position + object_2.hitbox_x      
 
-        if bottom_left_y_1 > top_left_y_2: #Player above Platform
+        #if bottom_left_y_1 > top_left_y_2: #Player above Platform
             
         
         if top_left_y_1 >= bottom_left_y_2 :
@@ -211,9 +211,7 @@ class Stage:
                     quit()
 
             keys = pygame.key.get_pressed()
-            sides_can_move= {"up": True, "down": True, "left": True, "right": True}
-
-            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width and sides_can_move[]:
+            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
                 player.x_position += player.speed
             
             if keys[pygame.K_a] and player.x_position >= 0:
