@@ -13,9 +13,6 @@ class Game:
         self.clock.tick(fps)
         self.window = GameDisplay(self.clock)
         self.mainMenu = MainMenu(self.window)
-
-    def open_menu(self):
         self.mainMenu.show_main_menu()
 
 game = Game()
-game.open_menu()
