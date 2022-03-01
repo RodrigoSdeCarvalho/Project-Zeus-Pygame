@@ -273,6 +273,8 @@ class Stage:
                         if self.collision(boss.skill, player):
                             boss.skill_attack(player)
                             boss_skill_run = False
+                        if self.collision(boss.skill, platforms[0]) or self.collision(boss.skill, platforms[1]):
+                            boss_skill_run = False
                     else:
                         boss.skill_reset()
                         
