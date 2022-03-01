@@ -1,3 +1,4 @@
+from turtle import distance
 import pygame
 from GameLogic.Characters.Character import Character
 from GameLogic.Characters.Skill import Skill
@@ -25,6 +26,7 @@ class Player(Character):
         self.__sprites = sprites
         self.window = surface
         self.__max_health = max_health
+        self.falling_time = 0 
 
     @property
     def max_health(self):
@@ -160,9 +162,23 @@ class Player(Character):
 
     def jump(self):     
         if self.y_position >= 0:
-            if self.jump_height >= (-1) * self.max_jump_height:
+            if self.jump_height >= 0:
                 self.y_position -= (self.jump_height * abs(self.jump_height)) / 2
                 self.jump_height -= 1
             else:
                 self.jump_height = self.max_jump_height
                 return True
+        else:
+            self.y_position = 0
+            self.jump_height = self.max_jump_height
+            return True
+
+    def fall(self):
+        distance_floor = 600 - (self.y_position + self.hitbox_y)
+        if distance_floor > 0:
+            self.y_position += (5 * self.falling_time)
+            self.y_position = int(self.y_position)
+            self.falling_time += 1 
+        else:
+            self.y_position = 540
+            self.falling_time = 0

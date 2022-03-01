@@ -34,7 +34,7 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 14, self.skills[0],
+                                 1000, 0, 540, 60, 60, 5, 12, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -242,13 +242,19 @@ class Stage:
                     player.skill_attack(boss)
 
             if not jumping:
-                if keys[pygame.K_SPACE]:
+                if not platform_collision_sides['up']:
+                    player.fall()
+                
+                if keys[pygame.K_SPACE] and (platform_collision_sides['up'] or player.y_position == 540):
                     jumping = True
-            elif platform_collision_sides["up"] == False:
-                finished = player.jump()
-                if finished:
+            else:
+                if not platform_collision_sides['down']:
+                    finished = player.jump()
+                    if finished:
+                        player.fall()
+                        jumping = False
+                else:
                     jumping = False
-
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])
