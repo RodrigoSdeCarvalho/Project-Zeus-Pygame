@@ -25,7 +25,7 @@ class Play(Button):
         current_stage.start()
 
     def onClick(self):
-            self.window.display.fill('#ffffff') #Retirar depois 
-            self.current_stage()
+            #self.window.display.fill('#ffffff') #Retirar depois 
+            #self.current_stage()
             self.start_current_stage()
             return False
