@@ -6,9 +6,9 @@ class Platform:
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
         self.__sprite = sprite
-        self.__width: width
-        self.__height: height
-        self.__color: color
+        self.__width = width
+        self.__height = height
+        self.__color = color
         self.window = surface
 
     @property
@@ -77,6 +77,6 @@ class Platform:
 
     def draw(self): #Erro
         self.window.draw_scaled_image(self.__sprite, 
-                    self.__hitbox_x, self.__hitbox_y, 
+                    self.__width, self.__height, 
                     self.__x_position, self.__y_position)
     # #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px
