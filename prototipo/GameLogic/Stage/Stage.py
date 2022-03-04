@@ -1,6 +1,5 @@
-from re import L
 import pygame
-
+from time import sleep
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
@@ -173,19 +172,19 @@ class Stage:
         bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
         top_right_x_2 = object_2.x_position + object_2.hitbox_x      
 
-        if bottom_left_y_1 > top_left_y_2: #Player above platform
-            platform_collision_sides["up"] = True
+        if bottom_left_y_1 == top_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player above platform
+            platform_collision_sides['up'] = True
             return
 
-        if top_left_y_1 < bottom_left_y_2 : #Player below platform
+        if top_left_y_1 == bottom_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player below platform
             platform_collision_sides["down"] = True
             return
 
-        if top_right_x_1 > top_left_x_2: #Player on the left of the platform
+        if top_right_x_1 == top_left_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the left of the platform
             platform_collision_sides["left"] = True
             return
 
-        if top_left_x_1 < top_right_x_2: #Player on the right of the platform
+        if top_left_x_1 == top_right_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the right of the platform
             platform_collision_sides["right"] = True
             return
 
@@ -221,14 +220,21 @@ class Stage:
 
             platform_collision_sides = {"up": False, "down": False, "left": False, "right": False}
             
+            '''
             if self.collision(player, platforms[0]) or self.collision(player, platforms[1]):
                 for platform in platforms:
                      self.platform_collision(player, platform)
+            '''
+            
+            '''
+            for platform in platforms:
+                self.platform_collision(player, platform)
+            '''
 
-            if keys[pygame.K_d] and platform_collision_sides["left"] == False:
+            if keys[pygame.K_d] and not platform_collision_sides["left"]:
                 player.move_right()
 
-            if keys[pygame.K_a] and platform_collision_sides["right"] == False:
+            if keys[pygame.K_a] and not platform_collision_sides["right"]:
                 player.move_left()
 
             if keys[pygame.K_LSHIFT]:
@@ -242,18 +248,17 @@ class Stage:
                     player.skill_attack(boss)
 
             if not jumping:
-                if not platform_collision_sides['up']:
+                if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
                     player.fall()
+                else:
+                    player.y_position = platforms[0].y_position - platforms[0].height - 5
                 
-                if keys[pygame.K_SPACE] and (platform_collision_sides['up'] or player.y_position == 540):
+                if keys[pygame.K_SPACE] and (self.collision(platforms[0], player) or self.collision(platforms[1], player) or player.y_position == 540):
                     jumping = True
             else:
-                if not platform_collision_sides['down']:
-                    finished = player.jump()
-                    if finished:
-                        player.fall()
-                        jumping = False
-                else:
+                finished = player.jump()
+                if finished:
+                    player.fall()
                     jumping = False
             
             self.window.display.fill((0, 0, 0))

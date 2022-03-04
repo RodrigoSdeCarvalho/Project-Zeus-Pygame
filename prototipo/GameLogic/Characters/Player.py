@@ -176,8 +176,7 @@ class Player(Character):
     def fall(self):
         distance_floor = 600 - (self.y_position + self.hitbox_y)
         if distance_floor > 0:
-            self.y_position += (5 * self.falling_time)
-            self.y_position = int(self.y_position)
+            self.y_position += 2 * self.falling_time
             self.falling_time += 1 
         else:
             self.y_position = 540
