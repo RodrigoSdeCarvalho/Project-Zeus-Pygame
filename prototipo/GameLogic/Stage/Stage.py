@@ -178,6 +178,18 @@ class Stage:
             self.write_on_display("Pausado", 15, [300, 300])
             self.write_on_display("c para continuar",10, [400, 300])
             pygame.display.update()
+    
+    def vitoria(self):
+        self.window.display.fill((100, 100, 100))
+        self.write_on_display("VITÓRIA", 50, [400, 300])
+        pygame.display.update()
+        self.stage_completed = True
+
+    def derrota(self):
+        self.window.display.fill((100, 100, 100))
+        self.write_on_display("DERROTA", 50, [400, 300])
+        pygame.display.update()
+        self.stage_completed = False
 
     def start(self):
         index = self.index
@@ -247,10 +259,16 @@ class Stage:
                         clock = 0
                         boss.skill.x_position = boss.x_position
                         boss.skill.y_position = boss.y_position + boss.hitbox_y
-                            
+            
+            else:
+                self.vitoria()
+                play = False
 
             if player.health > 0:    
                 self.draw_player(player)
+            else:
+                self.derrota()
+                play = False
 
             clock += 1
             pygame.time.delay(10)
