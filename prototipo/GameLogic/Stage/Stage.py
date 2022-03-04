@@ -174,8 +174,9 @@ class Stage:
                         paused = False
             
             #próximas linhas ainda não funcionam
-            self.write_on_display("Pausado", 15, [0, -300])
-            self.write_on_display("c para continuar",10, [400, -200])
+            self.window.display.fill((100, 100, 100))
+            self.write_on_display("Pausado", 15, [300, 300])
+            self.write_on_display("c para continuar",10, [400, 300])
             pygame.display.update()
 
     def start(self):
