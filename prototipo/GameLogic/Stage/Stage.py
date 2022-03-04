@@ -1,4 +1,5 @@
 import pygame
+from sqlalchemy import false
 
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
@@ -159,7 +160,23 @@ class Stage:
             return False
 
         return True
-
+    
+    def pause(self, window):
+        #p para pausar, c para continuar
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        paused = False
+            
+            #próximas linhas ainda não funcionam
+            self.write_on_display("Pausado", 15, [0, -300])
+            self.write_on_display("c para continuar",10, [400, -200])
+            pygame.display.update()
 
     def start(self):
         index = self.index
@@ -206,6 +223,9 @@ class Stage:
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
                     player.skill.attack(boss)
+            
+            if keys[pygame.K_p]:
+                self.pause() #p para pausar, c para continuar
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])
