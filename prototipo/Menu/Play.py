@@ -24,9 +24,10 @@ class Play(Button):
         current_stage = self.current_stage()
         current_stage.start()
 
-    def onClick(self):
-            self.window.display.fill('#ffffff') #Retirar depois
+    def onClick(self):#Retirar depois
             for i in range(len(self.stage_list)):
-                self.current_stage()
                 self.start_current_stage()
+            #self.window.display.fill('#ffffff') #Retirar depois 
+            #self.current_stage()
+            self.start_current_stage()
             return False

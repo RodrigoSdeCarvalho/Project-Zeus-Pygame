@@ -1,6 +1,5 @@
 import pygame
-from sqlalchemy import false
-
+from time import sleep
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
@@ -27,23 +26,24 @@ class Stage:
         self.__index = self.__level - 1
 
         self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0), 
-                            Skill("thunder", 100, '', 0, 0, 20, 20)] 
+                            Skill("thunder", 200, '', 0, 0, 20, 20)] 
 
         self.__weapons = []
 
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 150, self.skills[0],
+                                 1000, 0, 540, 60, 60, 5, 12, self.skills[0],
                                  Weapon(10, ''), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
-                     1000, 120, 72, 120, 72, 1, 150, self.skills[1],
+                     1000, 200, 72, 120, 72, 1, 150, self.skills[1],
                      Weapon(10, ''), 20, 60)]
 
-        self.__platforms = [Platform(0, 0, 600, 1, (0, 0, 0))]
+        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface),
+                            Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
 
@@ -191,13 +191,45 @@ class Stage:
         pygame.display.update()
         self.stage_completed = False
 
+    def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
+        top_left_x_1 = object_1.x_position
+        top_left_y_1 = object_1.y_position
+        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
+        top_right_x_1 = object_1.x_position + object_1.hitbox_x
+
+        top_left_x_2 = object_2.x_position
+        top_left_y_2 = object_2.y_position
+        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
+        top_right_x_2 = object_2.x_position + object_2.hitbox_x      
+
+        if bottom_left_y_1 == top_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player above platform
+            platform_collision_sides['up'] = True
+            return
+
+        if top_left_y_1 == bottom_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player below platform
+            platform_collision_sides["down"] = True
+            return
+
+        if top_right_x_1 == top_left_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the left of the platform
+            platform_collision_sides["left"] = True
+            return
+
+        if top_left_x_1 == top_right_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the right of the platform
+            platform_collision_sides["right"] = True
+            return
+
+        return
+
     def start(self):
+        global platform_collision_sides
+
         index = self.index
         player = self.players[index]
         boss = self.bosses[index]
         #skill = self.skills[index]
         #weapon = self.weapons[index]
         #minion = self.minion[index]
+        platforms = self.platforms
         map = self.maps[index]
 
         play = True
@@ -206,36 +238,58 @@ class Stage:
 
         clock = 0
         boss_skill_run = True
-        
+        jumping = False
+
         while play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-
+            
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_d] and player.x_position + player.hitbox_x <= self.window.width:
-                player.x_position += player.speed
+            platform_collision_sides = {"up": False, "down": False, "left": False, "right": False}
             
-            if keys[pygame.K_a] and player.x_position >= 0:
-                player.x_position -= player.speed
-                
-            if keys[pygame.K_s] and player.y_position + player.hitbox_y <= self.window.height:
-                player.y_position += player.speed
+            '''
+            if self.collision(player, platforms[0]) or self.collision(player, platforms[1]):
+                for platform in platforms:
+                     self.platform_collision(player, platform)
+            '''
+            
+            '''
+            for platform in platforms:
+                self.platform_collision(player, platform)
+            '''
 
-            if keys[pygame.K_w] and player.y_position >= 0:
-                player.y_position -= player.speed
+            if keys[pygame.K_d] and not platform_collision_sides["left"]:
+                player.move_right()
+
+            if keys[pygame.K_a] and not platform_collision_sides["right"]:
+                player.move_left()
 
             if keys[pygame.K_LSHIFT]:
-                player.speed = 10
-
+                player.increase_speed()
+            
             if not keys[pygame.K_LSHIFT]:
-                player.speed = 5
+                player.decrease_speed()
 
             if keys[pygame.K_e]:
                 if self.collision(player, boss):
-                    player.skill.attack(boss)
+                    player.skill_attack(boss)
+
+            if not jumping:
+                if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
+                    player.fall()
+                else:
+                    player.y_position = platforms[0].y_position - platforms[0].height - 5
+                
+                if keys[pygame.K_SPACE] and (self.collision(platforms[0], player) or self.collision(platforms[1], player) or player.y_position == 540):
+                    jumping = True
+            else:
+                finished = player.jump()
+                if finished:
+                    player.fall()
+                    jumping = False
             
             if keys[pygame.K_p]:
                 self.pause() #p para pausar, c para continuar
@@ -244,25 +298,31 @@ class Stage:
             self.status(boss, [700, 0])
             self.status(player, [0,0])
 
+            for platform in platforms:
+                platform.draw() 
+
             if boss.health > 0:
                 boss.move()
                 self.draw_boss(boss) 
                 if player.health > 0:
-                    if clock % (60 * 3) and boss_skill_run == True:
+                    if boss_skill_run and clock % (60 * 4):
                         self.draw_skill(boss.skill, boss.skill.x_position, boss.skill.y_position)
                         boss.skill.move(player)
                         if self.collision(boss.skill, player):
-                            boss.skill.attack(player)
+                            boss.skill_attack(player)
                             boss_skill_run = False
-                    else:  
-                        boss_skill_run = True
-                        clock = 0
-                        boss.skill.x_position = boss.x_position
-                        boss.skill.y_position = boss.y_position + boss.hitbox_y
-            
+
+                        if self.collision(boss.skill, platforms[0]) or self.collision(boss.skill, platforms[1]):
+                            boss_skill_run = False
+                    else:
+                        boss.skill_reset()
+                        
+                        if clock % (60) == 0:  
+                            clock = 0
+                            boss_skill_run = True
             else:
                 self.vitoria()
-                play = False
+                play = False                   
 
             if player.health > 0:    
                 self.draw_player(player)
@@ -271,7 +331,7 @@ class Stage:
                 play = False
 
             clock += 1
-            pygame.time.delay(10)
+            pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
 
 #Banco de dados com stage_completed (true ou false), para verificar qual a próxima fase.

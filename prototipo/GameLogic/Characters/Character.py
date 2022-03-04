@@ -109,15 +109,12 @@ class Character(ABC):
     def weapon(self, weapon):
         self.__weapon = weapon
 
-    def skill_attack(self):
-        self.skill.attack()
+    def skill_attack(self, target):
+        if self.health > 0:
+            self.skill.attack(target)
 
     def weapon_attack(self):
         self.weapon.attack()
-
-    @abstractmethod    
-    def move(self):
-        pass
 
     #def jump(self):
     #    self.rect.move_ip(0, self.jump_height)

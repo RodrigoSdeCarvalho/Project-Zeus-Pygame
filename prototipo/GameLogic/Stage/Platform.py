@@ -1,26 +1,55 @@
 class Platform:
-    def __init__(self, x_pos: int, y_pos: int, width: int, height: int, color: str):
-        self.__x_pos: x_pos
-        self.__y_pos: y_pos
-        self.__width: width
-        self.__height: height
-        self.__color: color
-    
-    @property
-    def x_pos(self):
-        return self.__x_pos
-
-    @x_pos.setter
-    def x_pos(self, x_pos):
-        self.__x_pos = x_pos
+    def __init__(self, x_position: int, y_position: int, hitbox_x: int, 
+                hitbox_y: int, sprite, width: int, height: int, color: str, surface):
+        self.__x_position = x_position
+        self.__y_position = y_position
+        self.__hitbox_x = hitbox_x
+        self.__hitbox_y = hitbox_y
+        self.__sprite = sprite
+        self.__width = width
+        self.__height = height
+        self.__color = color
+        self.window = surface
 
     @property
-    def y_pos(self):
-        return self.__y_pos
+    def x_position(self):
+        return self.__x_position
 
-    @y_pos.setter
-    def y_pos(self, y_pos):
-        self.__y_pos = y_pos
+    # @x_position.setter
+    # def x_position(self, x_position):
+    #     self.__x_position = x_position
+
+    @property
+    def hitbox_x(self):
+        return self.__hitbox_x
+
+    @hitbox_x.setter
+    def hitbox_x(self, hitbox_x):
+        self.__hitbox_x = hitbox_x
+
+    @property
+    def hitbox_y(self):
+        return self.__hitbox_y
+
+    @hitbox_y.setter
+    def hitbox_y(self, hitbox_y):
+        self.__hitbox_y = hitbox_y
+
+    @property
+    def y_position(self):
+        return self.__y_position
+
+    @y_position.setter
+    def y_position(self, y_position):
+        self.__y_position = y_position
+        
+    @property
+    def sprite(self):
+        return self.__sprite
+
+    @sprite.setter
+    def sprite(self, sprite):
+        self.__sprite = sprite
 
     @property
     def width(self):
@@ -46,4 +75,8 @@ class Platform:
     def color(self, color):
         self.__color = color
 
-    #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px
+    def draw(self): #Erro
+        self.window.draw_scaled_image(self.__sprite, 
+                    self.__width, self.__height, 
+                    self.__x_position, self.__y_position)
+    # #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px

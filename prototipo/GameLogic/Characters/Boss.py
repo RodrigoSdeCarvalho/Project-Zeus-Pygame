@@ -79,3 +79,6 @@ class Boss(Character):
             self.counter = 0
 
         self.counter += 1
+
+    def skill_reset(self):
+        self.skill.reset(self.x_position, self.y_position + self.hitbox_y)

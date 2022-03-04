@@ -1,3 +1,5 @@
+from re import X
+from tkinter import Y
 import pygame
 
 class Skill:
@@ -80,3 +82,7 @@ class Skill:
             self.y_position += 3
         elif self.y_position > target.y_position:
             self.y_position -= 3
+
+    def reset(self, x_position, y_position):
+        self.x_position = x_position
+        self.y_position = y_position

@@ -1,3 +1,4 @@
+from turtle import distance
 import pygame
 from GameLogic.Characters.Character import Character
 from GameLogic.Characters.Skill import Skill
@@ -17,11 +18,15 @@ class Player(Character):
         self.__xp = xp
         self.__x_position = x_position
         self.__y_position = y_position
+        self.__min_speed = speed
         self.__speed = speed
+        self.__max_speed = speed * 2.5
         self.__jump_height = jump_height
+        self.__max_jump_height = jump_height
         self.__sprites = sprites
         self.window = surface
         self.__max_health = max_health
+        self.falling_time = 0 
 
     @property
     def max_health(self):
@@ -68,6 +73,14 @@ class Player(Character):
         self.__y_position = y_position
 
     @property
+    def min_speed(self):
+        return self.__min_speed
+
+    @min_speed.setter
+    def min_speed(self, speed):
+        self.__min_speed = speed
+
+    @property
     def speed(self):
         return self.__speed
 
@@ -76,12 +89,28 @@ class Player(Character):
         self.__speed = speed
 
     @property
+    def max_speed(self):
+        return self.__max_speed
+
+    @max_speed.setter
+    def max_speed(self, speed):
+        self.__max_speed = speed
+
+    @property
     def jump_height(self):
         return self.__jump_height
 
     @jump_height.setter
     def jump_height(self, jump_height):
         self.__jump_height = jump_height
+
+    @property
+    def max_jump_height(self):
+        return self.__max_jump_height
+
+    @max_jump_height.setter
+    def max_jump_height(self, jump_height):
+        self.__max_jump_height = jump_height
         
     @property
     def sprites(self):
@@ -117,47 +146,38 @@ class Player(Character):
     def win(self):
         pass
     
+    def move_left(self):
+        if self.x_position >= 0:
+            self.x_position -= self.speed
+
+    def move_right(self):
+        if self.x_position + self.hitbox_x <= self.window.width:
+            self.x_position += self.speed
     
-    def move(self):
-        pass
-        '''
-        right_change = 0
-        left_change = 0
-        up_change = 0
-        down_change = 0
+    def increase_speed(self):
+        self.speed = self.max_speed
 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    left_change = 10
+    def decrease_speed(self):
+        self.speed = self.min_speed
 
-                elif event.key == pygame.K_d:
-                    right_change = 10
+    def jump(self):     
+        if self.y_position >= 0:
+            if self.jump_height >= 0:
+                self.y_position -= (self.jump_height * abs(self.jump_height)) / 2
+                self.jump_height -= 1
+            else:
+                self.jump_height = self.max_jump_height
+                return True
+        else:
+            self.y_position = 0
+            self.jump_height = self.max_jump_height
+            return True
 
-                #if event.key == pygame.K_SPACE:
-                    #up_change = 150
-
-                if event.key == pygame.K_LSHIFT:
-                    self.speed(2)
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_a:
-                    left_change = 0
-
-                elif event.key == pygame.K_d:
-                    right_change = 0
-
-                #if event.key == pygame.K_SPACE:
-                    #up_change = 0
-
-                if event.key == pygame.K_LSHIFT:
-                    self.speed(1)
-            
-            x_change = right_change - left_change
-            self.__x_position += x_change
-            #self.y_position = up_change - down_change
-
-            self.window.draw_scaled_image("prototipo\Images\square.png", 
-                                  self.hitbox_x, self.hitbox_y, 
-                                  self.x_position, self.y_position)
-'''
+    def fall(self):
+        distance_floor = 600 - (self.y_position + self.hitbox_y)
+        if distance_floor > 0:
+            self.y_position += 2 * self.falling_time
+            self.falling_time += 1 
+        else:
+            self.y_position = 540
+            self.falling_time = 0
