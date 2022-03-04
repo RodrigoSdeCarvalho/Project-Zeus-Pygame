@@ -139,6 +139,36 @@ class Stage:
             return False
 
         return True
+    
+    def pause(self):
+        #p para pausar, c para continuar
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        paused = False
+            
+            #próximas linhas ainda não funcionam
+            self.window.display.fill((100, 100, 100))
+            self.write_on_display("Pausado", 15, [300, 300])
+            self.write_on_display("c para continuar",10, [400, 300])
+            pygame.display.update()
+    
+    def vitoria(self):
+        self.window.display.fill((100, 100, 100))
+        self.write_on_display("VITÓRIA", 50, [400, 300])
+        pygame.display.update()
+        self.stage_completed = True
+
+    def derrota(self):
+        self.window.display.fill((100, 100, 100))
+        self.write_on_display("DERROTA", 50, [400, 300])
+        pygame.display.update()
+        self.stage_completed = False
 
     def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
         top_left_x_1 = object_1.x_position
@@ -225,7 +255,10 @@ class Stage:
                 if finished:
                     player.fall()
                     jumping = False
-
+            
+            if keys[pygame.K_p]:
+                self.pause() #p para pausar, c para continuar
+            
             self.window.display.fill((0, 0, 0))
             self.status(boss, [700, 0])
             self.status(player, [0,0])
@@ -244,6 +277,7 @@ class Stage:
                         if self.collision(boss.skill, player):
                             boss.skill_attack(player)
                             boss_skill_run = False
+
                         if self.collision(boss.skill, platforms[0]) or self.collision(boss.skill, platforms[1]):
                             boss_skill_run = False
                     else:
@@ -251,10 +285,16 @@ class Stage:
 
                         if clock % (60) == 0:  
                             clock = 0
-                            boss_skill_run = True                         
+                            boss_skill_run = True
+            else:
+                self.vitoria()
+                play = False                   
 
             if player.health > 0:    
                 player.draw()
+            else:
+                self.derrota()
+                play = False
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
