@@ -251,6 +251,7 @@ class Stage:
                 if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
                     player.fall()
                 else:
+                    player.fall(True)
                     player.y_position = platforms[0].y_position - platforms[0].height - 5
                 
                 if keys[pygame.K_SPACE] and (self.collision(platforms[0], player) or self.collision(platforms[1], player) or player.y_position == 540):

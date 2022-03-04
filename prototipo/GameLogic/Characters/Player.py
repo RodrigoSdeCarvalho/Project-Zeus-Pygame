@@ -173,11 +173,14 @@ class Player(Character):
             self.jump_height = self.max_jump_height
             return True
 
-    def fall(self):
+    def fall(self, collision = False):
         distance_floor = 600 - (self.y_position + self.hitbox_y)
         if distance_floor > 0:
             self.y_position += 2 * self.falling_time
             self.falling_time += 1 
         else:
             self.y_position = 540
+            self.falling_time = 0
+        
+        if collision:
             self.falling_time = 0
