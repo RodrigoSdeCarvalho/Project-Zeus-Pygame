@@ -161,7 +161,7 @@ class Stage:
 
         return True
     
-    def pause(self, window):
+    def pause(self):
         #p para pausar, c para continuar
         paused = True
         while paused:
