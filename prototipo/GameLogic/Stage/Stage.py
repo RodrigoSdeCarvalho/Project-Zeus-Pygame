@@ -180,16 +180,36 @@ class Stage:
             pygame.display.update()
     
     def vitoria(self):
-        self.window.display.fill((100, 100, 100))
-        self.write_on_display("VITÓRIA", 50, [400, 300])
-        pygame.display.update()
         self.stage_completed = True
+        run = True
+
+        while run:
+            self.window.display.fill((100, 100, 100))
+            self.write_on_display("VITÓRIA", 50, [400, 300])
+            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYUP:
+                    run = False
 
     def derrota(self):
-        self.window.display.fill((100, 100, 100))
-        self.write_on_display("DERROTA", 50, [400, 300])
-        pygame.display.update()
         self.stage_completed = False
+        run = True
+        
+        while run:
+            self.window.display.fill((100, 100, 100))
+            self.write_on_display("DERROTA", 50, [400, 300])
+            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    run = False
 
     def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
         top_left_x_1 = object_1.x_position
