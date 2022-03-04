@@ -27,6 +27,8 @@ class Player(Character):
         self.window = surface
         self.__max_health = max_health
         self.falling_time = 0 
+        self.__hitbox_x = hitbox_x
+        self.__hitbox_y = hitbox_y
 
     @property
     def max_health(self):
@@ -116,24 +118,6 @@ class Player(Character):
     def sprites(self):
         return self.__sprites
 
-    '''
-    def move(self):
-        pressed_keys = pygame.key.get_pressed() 
-
-        surface = pygame.display.get_surface()
-        screen_width = surface.get_width()
-        screen_height = surface.get_height()
-
-        if self.rect.left > 0 and pressed_keys[pygame.K_LEFT]:
-            self.rect.move_ip(self.speed, 0)
-        
-        if self.rect.right < screen_width and pressed_keys[pygame.K_RIGHT]:
-            self.rect.move_ip(self.speed, 0)
-
-        if self.rect.up < screen_height and pressed_keys[pygame.K_UP]:
-            self.jump()
-    '''
-
     def set_weapon_damage(self, xp):
         pass
 
@@ -181,3 +165,8 @@ class Player(Character):
         else:
             self.y_position = 540
             self.falling_time = 0
+
+    def draw(self):
+        self.window.draw_scaled_image("prototipo\Images\square.png", 
+                    self.__hitbox_x, self.__hitbox_y, 
+                    self.__x_position, self.__y_position)

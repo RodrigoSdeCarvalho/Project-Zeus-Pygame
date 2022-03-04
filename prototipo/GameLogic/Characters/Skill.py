@@ -1,9 +1,5 @@
-from re import X
-from tkinter import Y
-import pygame
-
 class Skill:
-    def __init__(self, name: str, damage: int, sprite: list, x_position, y_position, hitbox_x, hitbox_y):
+    def __init__(self, name: str, damage: int, sprite: list, x_position, y_position, hitbox_x, hitbox_y, surface):
         self.__name = name
         self.__damage = damage 
         self.__sprite = sprite 
@@ -11,6 +7,7 @@ class Skill:
         self.__y_position = y_position
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
+        self.window = surface
 
     @property
     def name(self):
@@ -86,3 +83,8 @@ class Skill:
     def reset(self, x_position, y_position):
         self.x_position = x_position
         self.y_position = y_position
+
+    def draw(self):
+        self.window.draw_scaled_image("prototipo\Images\white.jpg",
+                    self.__hitbox_x, self.__hitbox_y, 
+                    self.__x_position, self.__y_position)
