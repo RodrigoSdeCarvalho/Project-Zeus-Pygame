@@ -26,7 +26,7 @@ class Stage:
         self.__index = self.__level - 1
 
         self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0, surface), 
-                            Skill("thunder", 200, '', 0, 0, 20, 20, surface)] 
+                            Skill("thunder", 150, '', 0, 0, 20, 20, surface)] 
 
         self.__weapons = []
 
@@ -34,13 +34,13 @@ class Stage:
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
                                  1000, 0, 540, 60, 60, 5, 12, self.skills[0],
-                                 Weapon(10, ''), 100, 100, 0, surface)]
+                                 Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
                      1000, 200, 72, 120, 72, 1, 150, self.skills[1],
-                     Weapon(10, ''), 20, 60, surface)]
+                     20, 60, surface)]
 
         self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface),
                             Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
@@ -155,7 +155,7 @@ class Stage:
             #próximas linhas ainda não funcionam
             self.window.display.fill((100, 100, 100))
             self.write_on_display("Pausado", 15, [300, 300])
-            self.write_on_display("c para continuar",10, [400, 300])
+            self.write_on_display("Pressione C para continuar",10, [400, 300])
             pygame.display.update()
     
     def vitoria(self):
@@ -213,6 +213,7 @@ class Stage:
         clock = 0
         play = True
         boss_skill_run = True
+        player_attacking = False
         jumping = False
 
         pygame.display.update()
@@ -237,10 +238,6 @@ class Stage:
 
             if not keys[pygame.K_LSHIFT]:
                 player.decrease_speed()
-
-            if keys[pygame.K_e]:
-                if self.collision(player, boss):
-                    player.skill_attack(boss)
 
             if not jumping:
                 if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
@@ -296,6 +293,16 @@ class Stage:
             else:
                 self.derrota()
                 play = False
+
+            if not player_attacking:
+                if keys[pygame.K_e] and clock % (10) == 0:
+                    player_attacking = True
+            else:
+                finished = player.attack()
+                if self.collision(player.weapon, boss):
+                    boss.health -= player.weapon.damage
+                if finished:
+                    player_attacking = False
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
