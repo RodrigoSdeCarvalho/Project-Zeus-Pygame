@@ -3,19 +3,37 @@ import pygame
 from Menu.Button import Button
 
 class Help(Button):
-    def __init__(self, text: str, width: int, height: int, x: int, y: int, elevation: int, topColor: str, bottomColor: str, surface):
+    def __init__(self, text: str, width: int, height: int, x: int, y: int, elevation: int, topColor: str, bottomColor: str, surface, menu):
         super().__init__(text, width, height, x, y, elevation, topColor, bottomColor)
         self.screen = pygame.display.get_surface()
         self.window = surface
+        self.menu = menu
+
+        font = pygame.font.Font('freesansbold.ttf', 17)
+        title_font = pygame.font.Font('freesansbold.ttf', 25)
+        title_text_color = '#E1BC61'
+        text_color = '#CA8D56'
+
         self.__tutorial_background = pygame.transform.scale(pygame.image.load("prototipo/Images/tutorial_background.png"), (800, 600))
+        
+        self.__tutorial_title_icon = pygame.transform.scale(pygame.image.load('prototipo/Images/tutorial_title_icon.png'), (40, 40))
+        self.__tutorial_title_text = title_font.render('Help', True, title_text_color)
+        self.__tutorial_title_rect = self.tutorial_title_text.get_rect()
+        self.tutorial_title_rect.left = 410
+        self.tutorial_title_rect.top = 30
+
+        self.__tutorial_return = pygame.transform.scale(pygame.image.load('prototipo/Images/tutorial_return.png'), (15, 25))
+        self.__tutorial_return_rect = self.tutorial_return.get_rect()
+        self.tutorial_return_rect.left = 30
+        self.tutorial_return_rect.top = 30
+
         self.__tutorial_icons = [pygame.transform.scale(pygame.image.load('prototipo/Images/movement.png'), (60, 60)),
                                  pygame.transform.scale(pygame.image.load('prototipo/Images/attack.png'), (60, 60)),
                                  pygame.transform.scale(pygame.image.load('prototipo/Images/defense.png'), (60, 60)),
                                  pygame.transform.scale(pygame.image.load('prototipo/Images/health.png'), (60, 60)),
                                  pygame.transform.scale(pygame.image.load('prototipo/Images/magic.png'), (60, 60)),
                                  pygame.transform.scale(pygame.image.load('prototipo/Images/enemy.png'), (60, 60))]
-        font = pygame.font.Font('freesansbold.ttf', 17)
-        text_color = '#CA8D56'
+
         self.__movement_text = [font.render('Para andar pressione as teclas \'A\' e \'D\'.', True, text_color),
                                 font.render('Para pular pressione a barra de espaço.', True, text_color)]
         self.__movement_text_rect = []
@@ -33,7 +51,7 @@ class Help(Button):
         self.__magic_text = [font.render('O inimigo possui magias para lhe atacar, tome cuidado.', True, text_color)]
         self.__magic_text_rect = []
 
-        self.__enemy_text = [font.render('Seu objetivo é matar os Deuses do Olimpo. Boa sorte.', True, text_color)]
+        self.__enemy_text = [font.render('Seu objetivo é matar o Deus do Olimpo. Boa sorte.', True, text_color)]
         self.__enemy_text_rect = []
 
         for text in self.movement_text:
@@ -63,7 +81,7 @@ class Help(Button):
 
         for text in self.enemy_text:
             self.enemy_text_rect.append(text.get_rect())
-            self.enemy_text_rect[-1].left = 235
+            self.enemy_text_rect[-1].left = 247
             self.enemy_text_rect[-1].top = 500 + 25*len(self.enemy_text_rect)
         
         self.__tutorial_text = [self.movement_text, self.attack_text, self.defense_text,
@@ -75,6 +93,26 @@ class Help(Button):
     @property
     def tutorial_background(self):
         return self.__tutorial_background
+
+    @property
+    def tutorial_title_icon(self):
+        return self.__tutorial_title_icon
+
+    @property
+    def tutorial_title_text(self):
+        return self.__tutorial_title_text
+
+    @property
+    def tutorial_title_rect(self):
+        return self.__tutorial_title_rect
+
+    @property
+    def tutorial_return(self):
+        return self.__tutorial_return
+
+    @property
+    def tutorial_return_rect(self):
+        return self.__tutorial_return_rect
     
     @property
     def tutorial_icons(self):
@@ -144,6 +182,12 @@ class Help(Button):
         help = True
 
         self.window.display.blit(self.tutorial_background, (0, 0))
+        
+        self.window.display.blit(self.tutorial_title_icon, (350, 20))
+        self.window.display.blit(self.tutorial_title_text, self.tutorial_title_rect)
+
+        self.window.display.blit(self.tutorial_return, self.tutorial_return_rect)
+
         icon_y_position = 100
         for icon in self.tutorial_icons:
             self.window.display.blit(icon, (100, icon_y_position))
@@ -160,4 +204,9 @@ class Help(Button):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    
+                    if self.tutorial_return_rect.collidepoint(x, y):
+                        self.menu.show_main_menu()
 

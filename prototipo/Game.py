@@ -5,7 +5,6 @@ from Menu.MainMenu import MainMenu
 pygame.init()
 pygame.display.set_caption("Project Zeus")
 pygame.display.set_icon(pygame.transform.scale(pygame.image.load('prototipo/Images/game_icon.png'), (75,75)))
-
 class Game:
     def __init__(self):
         fps = 60

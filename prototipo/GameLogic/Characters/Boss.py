@@ -1,4 +1,3 @@
-import pygame
 from GameLogic.Characters.Character import Character
 from GameLogic.Characters.Skill import Skill
 from GameLogic.Characters.Weapon import Weapon
@@ -7,11 +6,11 @@ class Boss(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 
                 x_position: int, y_position: int, hitbox_x: int, 
                 hitbox_y: int, speed: int, jump_height: int, 
-                skill: Skill, weapon: Weapon, weak_point_x: int, weak_point_y: int):
+                skill: Skill, weak_point_x: int, weak_point_y: int, surface):
         super().__init__(name, sprites, health, max_health, 
                         x_position, y_position, hitbox_x, 
                         hitbox_y, speed, jump_height, 
-                        skill, weapon)
+                        skill)
         self.__weak_point_x: weak_point_x
         self.__weak_point_y: weak_point_y
         self.__x_position = x_position
@@ -20,7 +19,10 @@ class Boss(Character):
         self.__jump_height = jump_height
         self.__sprites = sprites
         self.__counter = 0
-    
+        self.window = surface
+        self.__hitbox_x = hitbox_x
+        self.__hitbox_y = hitbox_y
+
     @property
     def x_position(self):
         return self.__x_position
@@ -82,3 +84,8 @@ class Boss(Character):
 
     def skill_reset(self):
         self.skill.reset(self.x_position, self.y_position + self.hitbox_y)
+
+    def draw(self):
+        self.window.draw_scaled_image("prototipo\Images\qlue.png", 
+                    self.__hitbox_x, self.__hitbox_y, 
+                    self.__x_position, self.__y_position)
