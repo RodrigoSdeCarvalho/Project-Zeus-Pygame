@@ -10,7 +10,8 @@ class MainMenu:
         self.window = surface
         
         self.__buttons = [Play('Play', 260, 40, 430, 85, 5, '#614933', '#614933', surface),
-                          Help('Tutorial', 260, 40, 430, 170, 5, '#614933', '#614933', surface, self)]
+                          Settings('Easy Mode', 260, 40, 430, 170, 5, '#614933', '#614933', surface),
+                          Help('Tutorial', 260, 40, 430, 255, 5, '#614933', '#614933', surface, self)]
         
         self.__menu_background = pygame.transform.scale(pygame.image.load("prototipo\Images\menu_background.png"), (800, 600))
         self.__run = True

@@ -106,6 +106,12 @@ class Button(ABC):
     def text(self):
         return self.__text
 
+    @text.setter
+    def text(self, text):
+        self.__text = text
+        self.__text_surf = self.font.render(self.text, True, '#FFFFFF')
+        self.__text_rect = self.text_surf.get_rect(center = self.top_rect.center)
+
     @property
     def font(self):
         return self.__font
