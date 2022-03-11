@@ -24,12 +24,20 @@ class Play(Button):
             if stage.stage_completed == False:
                 print(stage.level)
                 return stage
+        
+        return 'jogo-completo'
 
     def start_current_stage(self):
         current_stage = self.current_stage()
+        if current_stage == 'jogo-completo':
+            for stage in self.stage_list:
+                stage.reset_stage()
+            
+            current_stage = self.current_stage()
+        
         current_stage.start()
 
-    def onClick(self):#Retirar depois
+    def onClick(self): #Retirar depois
         #a próxima linha garante que toda vez que o jogador clicar no botão de jogar, uma nova instância da lista de estágios é carregada.
         #Essa implementação pode gerar problemas caso hajam vários estágios, porém como é só um deve funcionar corretamente.
         self.stage_list = [Stage(1, 1, self.surface, False)]

@@ -1,5 +1,4 @@
 import pygame
-from time import sleep
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
@@ -140,6 +139,9 @@ class Stage:
 
         return True
     
+    def reset_stage(self):
+        self.stage_completed = False
+    
     def pause(self):
         #p para pausar, c para continuar
         paused = True
@@ -164,14 +166,14 @@ class Stage:
 
         while run:
             self.window.display.fill((100, 100, 100))
-            self.write_on_display("VITÓRIA", 50, [400, 300])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
+            self.write_on_display("VITÓRIA", 50, [400, 250])
+            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-                if event.type == pygame.KEYUP:
+                if event.type == pygame.KEYDOWN:
                     run = False
 
     def derrota(self):
@@ -180,8 +182,8 @@ class Stage:
         
         while run:
             self.window.display.fill((100, 100, 100))
-            self.write_on_display("DERROTA", 50, [400, 300])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
+            self.write_on_display("DERROTA", 50, [400, 250])
+            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -235,6 +237,8 @@ class Stage:
         boss_skill_run = True
         player_attacking = False
         jumping = False
+
+        vitoria = True
 
         pygame.display.update()
         while play:
@@ -305,13 +309,13 @@ class Stage:
                             clock = 0
                             boss_skill_run = True
             else:
-                self.vitoria()
+                vitoria = True
                 play = False                   
 
             if player.health > 0:    
                 player.draw()
             else:
-                self.derrota()
+                vitoria = False
                 play = False
 
             if not player_attacking:
@@ -327,3 +331,8 @@ class Stage:
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
+    
+        if vitoria:
+            self.vitoria()
+        else:
+            self.derrota()

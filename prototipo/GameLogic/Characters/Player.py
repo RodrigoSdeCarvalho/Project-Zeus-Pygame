@@ -172,7 +172,7 @@ class Player(Character):
     def jump(self):     
         if self.y_position >= 0:
             if self.jump_height >= 0:
-                self.y_position -= (self.jump_height * 4)
+                self.y_position -= (self.jump_height * 3)
                 self.jump_height -= 1
                 self.update_weapon_position()
             else:
