@@ -55,14 +55,17 @@ class MainMenu:
 
         pygame.display.update()
 
-        while self.run != False: 
+        while self.run != False:
+
+            self.window.display.blit(self.menu_background, (0, 0))
+            self.buttons_draw()
+            pygame.display.update()
             mouse_pos = pygame.mouse.get_pos()
             for button in self.buttons:
                 self.run = button.check_click(mouse_pos)
                 self.buttons_draw()
                 pygame.display.update()
-                if self.run == False:
-                    break
+                
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
