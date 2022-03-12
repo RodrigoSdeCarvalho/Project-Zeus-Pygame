@@ -127,17 +127,18 @@ class Player(Character):
     def facing(self, facing):
         self.__facing = facing
 
-    def set_weapon_damage(self, xp):
-        pass
+    def movement(self, keys):
+        if keys[pygame.K_d]:
+            self.move_right()
 
-    def set_skill_damage(self, xp):
-        pass
+        if keys[pygame.K_a]:
+            self.move_left()
 
-    def lose(self):
-        pass
+        if keys[pygame.K_LSHIFT]:
+            self.increase_speed()
 
-    def win(self):
-        pass
+        if not keys[pygame.K_LSHIFT]:
+            self.decrease_speed()
     
     def move_left(self):
         if self.x_position >= 0:

@@ -199,7 +199,6 @@ class Stage:
         #weapon = self.weapons[index]
         #minion = self.minion[index]
         platforms = self.platforms
-        map = self.maps[index]
 
         clock = 0
         play = True
@@ -218,17 +217,12 @@ class Stage:
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_d]:
-                player.move_right()
+            if keys[pygame.K_p]:
+                self.pause() #p para pausar, c para continuar
 
-            if keys[pygame.K_a]:
-                player.move_left()
-
-            if keys[pygame.K_LSHIFT]:
-                player.increase_speed()
-
-            if not keys[pygame.K_LSHIFT]:
-                player.decrease_speed()
+            #Game loop only tells Player Class what keys were pressed
+            #Player Class decides what movement happens based on key pressed
+            player.movement(keys)
 
             if not jumping:
                 if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
@@ -244,9 +238,6 @@ class Stage:
                 if finished:
                     player.fall()
                     jumping = False
-            
-            if keys[pygame.K_p]:
-                self.pause() #p para pausar, c para continuar
             
             self.window.display.fill((0, 0, 0))
             self.status(boss, [680, 20])
