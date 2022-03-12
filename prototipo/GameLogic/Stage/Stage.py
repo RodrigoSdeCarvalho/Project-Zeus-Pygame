@@ -6,6 +6,7 @@ from GameLogic.Characters.Weapon import Weapon
 from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
 from GameLogic.Stage.Map import Map
+from Difficulty.Difficulty import Difficulty
 
 #O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
 #fase tem esses objetos diferentes.
@@ -16,16 +17,15 @@ from GameLogic.Stage.Map import Map
 #objetos nas listas da create_stage_components.
 
 class Stage:
-    def __init__(self, level: int, difficulty: int, surface, stage_completed = False):
-        self.__level = level 
-        self.__difficulty = difficulty
+    def __init__(self, level: int, surface, stage_completed = False):
+        self.__level = level
         self.__stage_completed = stage_completed
         self.window = surface
 
         self.__index = self.__level - 1
 
         self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0, surface), 
-                            Skill("thunder", 150, '', 0, 0, 20, 20, surface)] 
+                            Skill("thunder", 150*Difficulty().mode, '', 0, 0, 20, 20, surface)] 
 
         self.__weapons = []
 
