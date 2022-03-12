@@ -102,17 +102,17 @@ class Stage:
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
 
-    def write_on_display(self,text, size, pos):
+    def write_on_display(self, text, size, pos):
         largeText = pygame.font.Font('freesansbold.ttf', size)
         TextSurf = largeText.render(text, True, (0,0,0))
         TextRect = TextSurf.get_rect()
         TextRect.center = ((pos[0], pos[1]))
         self.window.display.blit(TextSurf, TextRect)
 
-    def status(self, object, pos:list):
-        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/10, 10])
-        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/10, 10])
-        self.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 45, pos[1] +5])
+    def status(self, object, pos: list):
+        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/8.5, 10])
+        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/8.5, 10])
+        self.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 60, pos[1] + 5])
 
     def collision(self, object_1, object_2):
         top_left_x_1 = object_1.x_position
@@ -192,38 +192,7 @@ class Stage:
                 if event.type == pygame.KEYDOWN:
                     run = False
 
-    def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
-        top_left_x_1 = object_1.x_position
-        top_left_y_1 = object_1.y_position
-        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
-        top_right_x_1 = object_1.x_position + object_1.hitbox_x
-
-        top_left_x_2 = object_2.x_position
-        top_left_y_2 = object_2.y_position
-        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
-        top_right_x_2 = object_2.x_position + object_2.hitbox_x      
-
-        if bottom_left_y_1 == top_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player above platform
-            platform_collision_sides['up'] = True
-            return
-
-        if top_left_y_1 == bottom_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player below platform
-            platform_collision_sides["down"] = True
-            return
-
-        if top_right_x_1 == top_left_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the left of the platform
-            platform_collision_sides["left"] = True
-            return
-
-        if top_left_x_1 == top_right_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the right of the platform
-            platform_collision_sides["right"] = True
-            return
-
-        return
-
     def start(self):
-        global platform_collision_sides
-
         index = self.index
         player = self.players[index]
         boss = self.bosses[index]
@@ -249,12 +218,10 @@ class Stage:
 
             keys = pygame.key.get_pressed()
 
-            platform_collision_sides = {"up": False, "down": False, "left": False, "right": False}
-
-            if keys[pygame.K_d] and not platform_collision_sides["left"]:
+            if keys[pygame.K_d]:
                 player.move_right()
 
-            if keys[pygame.K_a] and not platform_collision_sides["right"]:
+            if keys[pygame.K_a]:
                 player.move_left()
 
             if keys[pygame.K_LSHIFT]:
@@ -282,8 +249,8 @@ class Stage:
                 self.pause() #p para pausar, c para continuar
             
             self.window.display.fill((0, 0, 0))
-            self.status(boss, [700, 0])
-            self.status(player, [0,0])
+            self.status(boss, [680, 20])
+            self.status(player, [3, 20])
 
             for platform in platforms:
                 platform.draw() 
