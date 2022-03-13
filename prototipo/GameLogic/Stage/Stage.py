@@ -7,6 +7,7 @@ from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
 from GameLogic.Stage.Map import Map
 from Difficulty.Difficulty import Difficulty
+from GameLogic.Stage.Collision import Collision
 
 #O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
 #fase tem esses objetos diferentes.
@@ -45,6 +46,8 @@ class Stage:
                             Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
+
+        self.collision = Collision
 
     @property
     def index(self):
@@ -101,36 +104,6 @@ class Stage:
     @stage_completed.setter
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
-
-    def status(self, object, pos: list):
-        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/8.5, 10])
-        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/8.5, 10])
-        self.window.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 60, pos[1] + 5])
-
-    def collision(self, object_1, object_2):
-        top_left_x_1 = object_1.x_position
-        top_left_y_1 = object_1.y_position
-        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
-        top_right_x_1 = object_1.x_position + object_1.hitbox_x
-
-        top_left_x_2 = object_2.x_position
-        top_left_y_2 = object_2.y_position
-        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
-        top_right_x_2 = object_2.x_position + object_2.hitbox_x
-
-        if bottom_left_y_1 <= top_left_y_2:
-            return False
-        
-        if top_left_y_1 >= bottom_left_y_2 :
-            return False
-
-        if top_right_x_1 <= top_left_x_2:
-            return False
-
-        if top_left_x_1 >= top_right_x_2:
-            return False
-
-        return True
     
     def reset_stage(self):
         self.stage_completed = False
@@ -218,23 +191,24 @@ class Stage:
             player.movement(keys)
 
             if not jumping:
-                if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
+                if not (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
                     player.fall()
                 else:
                     player.fall(True)
                     player.y_position = platforms[0].y_position - platforms[0].height - 5
 
-                if keys[pygame.K_SPACE] and (self.collision(platforms[0], player) or self.collision(platforms[1], player) or player.y_position == 540):
+                if keys[pygame.K_SPACE] and (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player) or player.y_position == 540):
                     jumping = True
             else:
                 finished = player.jump()
                 if finished:
                     player.fall()
                     jumping = False
-            
+
             self.window.display.fill((0, 0, 0))
-            self.status(boss, [680, 20])
-            self.status(player, [3, 20])
+
+            boss.status([680, 20])
+            player.status([3, 20])
 
             for platform in platforms:
                 platform.draw() 
@@ -247,11 +221,11 @@ class Stage:
                     if boss_skill_run and clock % (60 * 4):
                         boss.skill.draw()
                         boss.skill.move(player)
-                        if self.collision(boss.skill, player):
+                        if self.collision.check(boss.skill, player):
                             boss.skill_attack(player)
                             boss_skill_run = False
 
-                        if self.collision(boss.skill, platforms[0]) or self.collision(boss.skill, platforms[1]):
+                        if self.collision.check(boss.skill, platforms[0]) or self.collision.check(boss.skill, platforms[1]):
                             boss_skill_run = False
                     else:
                         boss.skill_reset()
@@ -270,11 +244,11 @@ class Stage:
                 play = False
 
             if not player_attacking:
-                if keys[pygame.K_e] and clock % (10) == 0:
+                if keys[pygame.K_e] and clock % (10) == 0: #Discutir melhor clock. Eu, Rodrigo, achei melhor 5.
                     player_attacking = True
             else:
                 finished = player.attack()
-                if self.collision(player.weapon, boss):
+                if self.collision.check(player.weapon, boss):
                     boss.health -= player.weapon.damage
                 if finished:
                     player_attacking = False
@@ -282,7 +256,7 @@ class Stage:
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
-    
+
         if vitoria:
             self.vitoria()
         else:
