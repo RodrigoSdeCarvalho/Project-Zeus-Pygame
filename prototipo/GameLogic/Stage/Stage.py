@@ -121,9 +121,9 @@ class Stage:
                         paused = False
             
             #próximas linhas ainda não funcionam
-            self.window.display.fill((100, 100, 100))
-            self.window.write_on_display("Pausado", 15, [300, 300])
-            self.window.write_on_display("Pressione C para continuar",10, [400, 300])
+            self.window.display.fill(('#614933'))
+            self.window.write_on_display("Pausado", 30, [400, 270], ('#FFD56D'))
+            self.window.write_on_display("Pressione C para continuar", 20, [400, 320], ('#CF9158'))
             pygame.display.update()
     
     def vitoria(self):
@@ -244,7 +244,7 @@ class Stage:
                 play = False
 
             if not player_attacking:
-                if keys[pygame.K_e] and clock % (10) == 0: #Discutir melhor clock. Eu, Rodrigo, achei melhor 5.
+                if keys[pygame.K_e] and clock % (5) == 0: #Discutir melhor clock. Eu, Rodrigo, achei melhor 5.
                     player_attacking = True
             else:
                 finished = player.attack()
