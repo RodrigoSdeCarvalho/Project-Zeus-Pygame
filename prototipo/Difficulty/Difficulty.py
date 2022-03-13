@@ -3,7 +3,7 @@ class Difficulty(object):
     
     @classmethod
     def increase(cls):
-        cls.mode += 1
+        cls.mode += 3
     
     @classmethod
     def reset(cls):
