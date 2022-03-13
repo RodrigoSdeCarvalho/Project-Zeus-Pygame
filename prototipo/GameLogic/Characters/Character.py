@@ -109,6 +109,11 @@ class Character(ABC):
     def weapon(self, weapon):
         self.__weapon = weapon
 
+    def status(self, pos: list):
+        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], self.max_health/8.5, 10])
+        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], self.health/8.5, 10])
+        self.window.write_on_display(f"{self.name} {self.health}/{self.max_health}", 10, [pos[0] + 60, pos[1] + 5])
+
     def skill_attack(self, target):
         if self.health > 0:
             self.skill.attack(target)
