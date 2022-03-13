@@ -102,17 +102,10 @@ class Stage:
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
 
-    def write_on_display(self, text, size, pos):
-        largeText = pygame.font.Font('freesansbold.ttf', size)
-        TextSurf = largeText.render(text, True, (0,0,0))
-        TextRect = TextSurf.get_rect()
-        TextRect.center = ((pos[0], pos[1]))
-        self.window.display.blit(TextSurf, TextRect)
-
     def status(self, object, pos: list):
         pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/8.5, 10])
         pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/8.5, 10])
-        self.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 60, pos[1] + 5])
+        self.window.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 60, pos[1] + 5])
 
     def collision(self, object_1, object_2):
         top_left_x_1 = object_1.x_position
@@ -156,8 +149,8 @@ class Stage:
             
             #próximas linhas ainda não funcionam
             self.window.display.fill((100, 100, 100))
-            self.write_on_display("Pausado", 15, [300, 300])
-            self.write_on_display("Pressione C para continuar",10, [400, 300])
+            self.window.write_on_display("Pausado", 15, [300, 300])
+            self.window.write_on_display("Pressione C para continuar",10, [400, 300])
             pygame.display.update()
     
     def vitoria(self):
@@ -166,8 +159,8 @@ class Stage:
 
         while run:
             self.window.display.fill((100, 100, 100))
-            self.write_on_display("VITÓRIA", 50, [400, 250])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
+            self.window.write_on_display("VITÓRIA", 50, [400, 250])
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -182,8 +175,8 @@ class Stage:
         
         while run:
             self.window.display.fill((100, 100, 100))
-            self.write_on_display("DERROTA", 50, [400, 250])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
+            self.window.write_on_display("DERROTA", 50, [400, 250])
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

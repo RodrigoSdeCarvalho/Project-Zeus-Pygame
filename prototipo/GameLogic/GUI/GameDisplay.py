@@ -23,3 +23,10 @@ class GameDisplay:
         img = pygame.image.load(image)
         img = pygame.transform.scale(img, (scale_x, scale_y))
         self.display.blit(img, (x, y))
+
+    def write_on_display(self, text, size, pos):
+        largeText = pygame.font.Font('freesansbold.ttf', size)
+        TextSurf = largeText.render(text, True, (0,0,0))
+        TextRect = TextSurf.get_rect()
+        TextRect.center = ((pos[0], pos[1]))
+        self.display.blit(TextSurf, TextRect)
