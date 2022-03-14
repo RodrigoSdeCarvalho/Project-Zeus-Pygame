@@ -32,6 +32,7 @@ class Player(Character):
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
         self.__facing = facing
+        self.__attacking = False
 
     @property
     def max_health(self):
@@ -137,6 +138,14 @@ class Player(Character):
     def facing(self, facing):
         self.__facing = facing
 
+    @property
+    def attacking(self):
+        return self.__attacking
+
+    @attacking.setter
+    def attacking(self, attacking):
+        self.__attacking = attacking
+
     def movement(self, keys, canJump):
         if keys[pygame.K_d]:
             self.move_right()
@@ -149,7 +158,7 @@ class Player(Character):
 
         if not keys[pygame.K_LSHIFT]:
             self.decrease_speed()
-        
+            
         if not self.jumping:
             if canJump or self.y_position == 540:
                 if keys[pygame.K_SPACE]:
@@ -179,11 +188,19 @@ class Player(Character):
     def decrease_speed(self):
         self.speed = self.min_speed
     
-    def attack(self):
-        stop = self.weapon.update(self.facing)
-        self.weapon.draw()
+    def attack(self, keys, attacked_boss, target, clock):
+        if not self.attacking:
+            if keys[pygame.K_e] and (clock % 5 == 0):
+                self.attacking = True
+        else:
+            finished = self.weapon.update(self.facing)
+            self.weapon.draw()
 
-        return stop
+            if attacked_boss:
+                self.weapon.hit(target)
+
+            if finished:
+                self.attacking = False
     
     def update_weapon_position(self):
         if self.facing == 'right':

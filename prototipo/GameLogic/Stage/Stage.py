@@ -170,7 +170,7 @@ class Stage:
         clock = 0
         play = True
         boss_skill_run = True
-        player_attacking = False
+        attacked_boss = False
         canJump = False
 
         vitoria = True
@@ -183,13 +183,24 @@ class Stage:
                     quit()
 
             keys = pygame.key.get_pressed()
-
             if keys[pygame.K_p]:
                 self.pause() #p para pausar, c para continuar
 
-            #Game loop only tells Player Class what keys were pressed
+
+            #Game loop only tells Player Class what keys were pressed and if he can jump
             #Player Class decides what movement happens based on key pressed
             canFall = player.movement(keys, canJump)
+            pygame.display.update()
+            
+            #Game loop tells Player Class what keys were pressed, if he hit the target, the target and the clock
+            player.attack(keys, attacked_boss, boss, clock)
+            pygame.display.update()
+
+            #Checks if the player's weapon hit the Boss
+            if self.collision.check(player.weapon, boss):
+                    attacked_boss = True
+            else:
+                attacked_boss = False
 
             #Checks if player is above a platform
             #If so he can jump
@@ -207,6 +218,7 @@ class Stage:
 
             self.window.display.fill((0, 0, 0))
 
+            #Player and Boss health bars
             boss.status([680, 20])
             player.status([3, 20])
 
@@ -242,16 +254,6 @@ class Stage:
             else:
                 vitoria = False
                 play = False
-
-            if not player_attacking:
-                if keys[pygame.K_e] and clock % (5) == 0: #Discutir melhor clock. Eu, Rodrigo, achei melhor 5.
-                    player_attacking = True
-            else:
-                finished = player.attack()
-                if self.collision.check(player.weapon, boss):
-                    boss.health -= player.weapon.damage
-                if finished:
-                    player_attacking = False
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.

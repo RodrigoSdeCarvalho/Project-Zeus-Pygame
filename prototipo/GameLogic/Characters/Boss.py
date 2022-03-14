@@ -66,9 +66,6 @@ class Boss(Character):
     @counter.setter
     def counter(self, counter):
         self.__counter = counter
-
-    def summon_minions(self):
-        pass
     
     def move(self):
         distance = 400
@@ -81,6 +78,15 @@ class Boss(Character):
             self.counter = 0
 
         self.counter += 1
+    
+    def attacked(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.health = 0
+            self.die()
+
+    def die(self):
+        pass
 
     def skill_reset(self):
         self.skill.reset(self.x_position, self.y_position + self.hitbox_y)

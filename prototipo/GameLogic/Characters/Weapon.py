@@ -122,6 +122,9 @@ class Weapon:
         if self.angle == 120 or self.angle == -120:
             self.angle = 0
             return True
+        
+    def hit(self, target):
+        target.attacked(self.damage)
     
     def draw(self):
         self.window.display.blit(self.sprite, self.image_rect)
