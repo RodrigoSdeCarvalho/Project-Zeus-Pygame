@@ -1,3 +1,4 @@
+from doctest import ELLIPSIS_MARKER
 import pygame
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
@@ -33,7 +34,7 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 12, self.skills[0],
+                                 1000, 100, 100, 60, 60, 3, 16, self.skills[0],
                                  Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -170,7 +171,7 @@ class Stage:
         play = True
         boss_skill_run = True
         player_attacking = False
-        jumping = False
+        canJump = False
 
         vitoria = True
 
@@ -188,22 +189,21 @@ class Stage:
 
             #Game loop only tells Player Class what keys were pressed
             #Player Class decides what movement happens based on key pressed
-            player.movement(keys)
+            canFall = player.movement(keys, canJump)
 
-            if not jumping:
+            #Checks if player is above a platform
+            #If so he can jump
+            if (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
+                canJump = True
+            else:
+                canJump = False
+
+            #If player is not jumping, he can fall to a platform or to the ground
+            if not canFall:
                 if not (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
                     player.fall()
                 else:
-                    player.fall(True)
-                    player.y_position = platforms[0].y_position - platforms[0].height - 5
-
-                if keys[pygame.K_SPACE] and (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player) or player.y_position == 540):
-                    jumping = True
-            else:
-                finished = player.jump()
-                if finished:
-                    player.fall()
-                    jumping = False
+                    player.fall(platforms[0].y_position, platforms[0].height, True)
 
             self.window.display.fill((0, 0, 0))
 

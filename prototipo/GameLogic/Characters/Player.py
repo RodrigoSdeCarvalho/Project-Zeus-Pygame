@@ -1,3 +1,4 @@
+from cgitb import reset
 from turtle import distance
 import pygame
 from GameLogic.Characters.Character import Character
@@ -23,6 +24,7 @@ class Player(Character):
         self.__max_speed = speed * 2.5
         self.__jump_height = jump_height
         self.__max_jump_height = jump_height
+        self.__jumping = False
         self.__sprites = sprites
         self.window = surface
         self.__max_health = max_health
@@ -114,6 +116,14 @@ class Player(Character):
     @max_jump_height.setter
     def max_jump_height(self, jump_height):
         self.__max_jump_height = jump_height
+    
+    @property
+    def jumping(self):
+        return self.__jumping
+    
+    @jumping.setter
+    def jumping(self, jumping):
+        self.__jumping = jumping
         
     @property
     def sprites(self):
@@ -127,7 +137,7 @@ class Player(Character):
     def facing(self, facing):
         self.__facing = facing
 
-    def movement(self, keys):
+    def movement(self, keys, canJump):
         if keys[pygame.K_d]:
             self.move_right()
 
@@ -139,6 +149,17 @@ class Player(Character):
 
         if not keys[pygame.K_LSHIFT]:
             self.decrease_speed()
+        
+        if not self.jumping:
+            if canJump or self.y_position == 540:
+                if keys[pygame.K_SPACE]:
+                    self.jumping = True
+        else:
+            finished = self.jump()
+            if finished:
+                self.jumping = False
+
+        return self.jumping
     
     def move_left(self):
         if self.x_position >= 0:
@@ -173,7 +194,7 @@ class Player(Character):
     def jump(self):     
         if self.y_position >= 0:
             if self.jump_height >= 0:
-                self.y_position -= (self.jump_height * 3)
+                self.y_position -= self.jump_height * 2
                 self.jump_height -= 1
                 self.update_weapon_position()
             else:
@@ -187,7 +208,7 @@ class Player(Character):
             self.update_weapon_position()
             return True
 
-    def fall(self, collision = False):
+    def fall(self, reset_y_position = 0, reset_height = 0, collision = False):
         distance_floor = 600 - (self.y_position + self.hitbox_y)
         if distance_floor > 0:
             self.y_position += 2 * self.falling_time
@@ -197,10 +218,13 @@ class Player(Character):
             self.y_position = 540
             self.falling_time = 0
             self.update_weapon_position()
+            return True
         
         if collision:
             self.falling_time = 0
+            self.y_position = reset_y_position - reset_height - 5
             self.update_weapon_position()
+            return True
 
     def draw(self):
         self.window.draw_scaled_image("prototipo\Images\square.png", 
