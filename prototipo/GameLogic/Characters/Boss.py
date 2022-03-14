@@ -93,9 +93,6 @@ class Boss(Character):
 
     def attacked(self, damage):
         self.health -= damage
-        if self.health <= 0:
-            self.health = 0
-            self.die()
     
     def attack(self, collision, target, hit_target, clock):
         if self.health > 0:
@@ -119,12 +116,17 @@ class Boss(Character):
         return clock
 
     def die(self):
-        pass
+        if self.health <= 0:
+            self.health = 0
+            return True
+        
+        return False
 
     def skill_reset(self):
         self.skill.reset(self.x_position, self.y_position + self.hitbox_y)
 
     def draw(self):
-        self.window.draw_scaled_image("prototipo\Images\qlue.png", 
-                    self.__hitbox_x, self.__hitbox_y, 
-                    self.__x_position, self.__y_position)
+        if self.health > 0:
+            self.window.draw_scaled_image("prototipo\Images\qlue.png", 
+                        self.__hitbox_x, self.__hitbox_y, 
+                        self.__x_position, self.__y_position)

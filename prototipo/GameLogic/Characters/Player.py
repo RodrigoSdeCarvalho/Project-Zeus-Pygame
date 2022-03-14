@@ -167,6 +167,8 @@ class Player(Character):
             finished = self.jump()
             if finished:
                 self.jumping = False
+        
+        self.draw()
 
         return self.jumping
     
@@ -242,8 +244,16 @@ class Player(Character):
             self.y_position = reset_y_position - reset_height - 5
             self.update_weapon_position()
             return True
+        
+    def die(self):
+        if self.health <= 0:
+            self.health = 0
+            return True
+
+        return False
 
     def draw(self):
-        self.window.draw_scaled_image("prototipo\Images\square.png", 
-                    self.__hitbox_x, self.__hitbox_y, 
-                    self.__x_position, self.__y_position)
+        if self.health > 0:
+            self.window.draw_scaled_image("prototipo\Images\square.png", 
+                        self.__hitbox_x, self.__hitbox_y, 
+                        self.__x_position, self.__y_position)

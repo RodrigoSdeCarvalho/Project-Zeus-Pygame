@@ -174,7 +174,8 @@ class Stage:
         attacked_boss = False
         canJump = False
 
-        vitoria = True
+        vitoria = False
+        derrota = False
 
         pygame.display.update()
         while play:
@@ -196,6 +197,9 @@ class Stage:
             #Game loop tells Player Class what keys were pressed, if he hit the target, the target and the clock
             player.attack(keys, attacked_boss, boss, clock)
             pygame.display.update()
+
+            #If player dies he loses
+            derrota = player.die()
 
             #Checks if the player's weapon hit the Boss
             if self.collision.check(player.weapon, boss):
@@ -226,38 +230,36 @@ class Stage:
             for platform in platforms:
                 platform.draw() 
 
+            #Boss movement and attacking
             boss.move()
             clock = boss.attack(skill_ground_collision, player, player_hit, clock)
 
+            #Tells the boss if a collision with his skill and player occurred
             if self.collision.check(boss.skill, player):
                 player_hit = True
             else:
                 player_hit = False
             
+            #Tells the boss if a collision with his skill and a platform occurred
             if self.collision.check(boss.skill, platforms[0]) or self.collision.check(boss.skill, platforms[1]):
                 skill_ground_collision = True
             else:
                 skill_ground_collision = False
 
+            #If boss dies player wins
+            vitoria = boss.die()
 
-            '''
-            else:
-                vitoria = True
+            #If player wins or loses game loop stops running
+            if vitoria or derrota:
                 play = False
-            '''            
 
-            #Modificar
-            if player.health > 0:    
-                player.draw()
-            else:
-                vitoria = False
-                play = False
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
 
+        #Shows winning or losing screens 
         if vitoria:
             self.vitoria()
-        else:
+        if derrota:
             self.derrota()
