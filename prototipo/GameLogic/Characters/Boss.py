@@ -22,6 +22,7 @@ class Boss(Character):
         self.window = surface
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
+        self.__run_skill = True
 
     @property
     def x_position(self):
@@ -66,24 +67,56 @@ class Boss(Character):
     @counter.setter
     def counter(self, counter):
         self.__counter = counter
+
+    @property
+    def run_skill(self):
+        return self.__run_skill
+
+    @run_skill.setter
+    def run_skill(self, run_skill):
+        self.__run_skill = run_skill
     
     def move(self):
         distance = 400
 
-        if self.counter >= 0 and self.counter <= distance:
-            self.x_position += self.speed
-        elif self.counter >= distance and self.counter <= distance*2:
-            self.x_position -= self.speed
-        else:
-            self.counter = 0
+        if self.health > 0:
+            if self.counter >= 0 and self.counter <= distance:
+                self.x_position += self.speed
+            elif self.counter >= distance and self.counter <= distance*2:
+                self.x_position -= self.speed
+            else:
+                self.counter = 0
+            
+            self.draw()
 
         self.counter += 1
-    
+
     def attacked(self, damage):
         self.health -= damage
         if self.health <= 0:
             self.health = 0
             self.die()
+    
+    def attack(self, collision, target, hit_target, clock):
+        if self.health > 0:
+            if self.run_skill and clock % (60 * 4):
+                self.skill.draw()
+                self.skill.move(target)
+
+                if hit_target:
+                    self.skill_attack(target)
+                    self.run_skill = False
+                
+                if collision:
+                    self.run_skill = False
+            else:
+                self.skill_reset()
+
+                if clock % (60) == 0:
+                    self.run_skill = True
+                    return 0
+        
+        return clock
 
     def die(self):
         pass

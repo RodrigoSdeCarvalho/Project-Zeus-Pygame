@@ -34,7 +34,7 @@ class Stage:
         self.__minions = []
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
-                                 1000, 100, 100, 60, 60, 3, 16, self.skills[0],
+                                 1000, 0, 540, 60, 60, 3, 16, self.skills[0],
                                  Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
@@ -169,7 +169,8 @@ class Stage:
 
         clock = 0
         play = True
-        boss_skill_run = True
+        skill_ground_collision = False
+        player_hit = False
         attacked_boss = False
         canJump = False
 
@@ -209,7 +210,7 @@ class Stage:
             else:
                 canJump = False
 
-            #If player is not jumping, he can fall to a platform or to the ground
+            #If player is not jumping, he falls to a platform or to the ground
             if not canFall:
                 if not (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
                     player.fall()
@@ -225,30 +226,27 @@ class Stage:
             for platform in platforms:
                 platform.draw() 
 
-            if boss.health > 0:
-                boss.move()
-                boss.draw()
+            boss.move()
+            clock = boss.attack(skill_ground_collision, player, player_hit, clock)
 
-                if player.health > 0:
-                    if boss_skill_run and clock % (60 * 4):
-                        boss.skill.draw()
-                        boss.skill.move(player)
-                        if self.collision.check(boss.skill, player):
-                            boss.skill_attack(player)
-                            boss_skill_run = False
+            if self.collision.check(boss.skill, player):
+                player_hit = True
+            else:
+                player_hit = False
+            
+            if self.collision.check(boss.skill, platforms[0]) or self.collision.check(boss.skill, platforms[1]):
+                skill_ground_collision = True
+            else:
+                skill_ground_collision = False
 
-                        if self.collision.check(boss.skill, platforms[0]) or self.collision.check(boss.skill, platforms[1]):
-                            boss_skill_run = False
-                    else:
-                        boss.skill_reset()
 
-                        if clock % (60) == 0:  
-                            clock = 0
-                            boss_skill_run = True
+            '''
             else:
                 vitoria = True
-                play = False                   
+                play = False
+            '''            
 
+            #Modificar
             if player.health > 0:    
                 player.draw()
             else:
