@@ -22,7 +22,6 @@ class Play(Button):
     def current_stage(self):
         for stage in self.stage_list:
             if stage.stage_completed == False:
-                print(stage.level)
                 return stage
         
         return 'jogo-completo'
