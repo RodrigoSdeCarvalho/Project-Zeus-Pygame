@@ -26,8 +26,14 @@ class Stage:
 
         self.__index = self.__level - 1
 
-        self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0, surface), 
-                            Skill("thunder", 150*Difficulty().mode, '', 0, 0, 20, 20, surface)] 
+        self.__skills = [Skill("hit", 10, '', Player.x_position, 
+                               Player.y_position, 0, 0, surface), 
+                        Skill("thunder", 150*Difficulty().mode, 
+                              {'down': 'prototipo\Images\shunder0.png',
+                               'right': 'prototipo\Images\shunder90.png',
+                               'left': 'prototipo\Images\shunder270.png',
+                               'up': 'prototipo\Images\shunder180.png'},
+                              0, 0, 20, 30, surface)] 
 
         self.__weapons = []
 
