@@ -15,10 +15,6 @@ class Platform:
     def x_position(self):
         return self.__x_position
 
-    # @x_position.setter
-    # def x_position(self, x_position):
-    #     self.__x_position = x_position
-
     @property
     def hitbox_x(self):
         return self.__hitbox_x
@@ -79,4 +75,4 @@ class Platform:
         self.window.draw_scaled_image(self.__sprite, 
                     self.__width, self.__height, 
                     self.__x_position, self.__y_position)
-    # #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px
+    #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px

@@ -48,6 +48,8 @@ class Stage:
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
 
+        self.__backgrounds = [pygame.transform.scale(pygame.image.load("prototipo/Images/background_stage.jpg"), (800, 600))]
+
         self.collision = Collision
 
     @property
@@ -105,7 +107,11 @@ class Stage:
     @stage_completed.setter
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
-    
+
+    @property
+    def backgrounds(self):
+        return self.__backgrounds
+
     def reset_stage(self):
         self.stage_completed = False
     
@@ -165,6 +171,7 @@ class Stage:
         boss = self.bosses[index]
         #weapon = self.weapons[index]
         #minion = self.minion[index]
+        background = self.backgrounds[index]
         platforms = self.platforms
 
         clock = 0
@@ -209,6 +216,7 @@ class Stage:
 
             #Checks if player is above a platform
             #If so he can jump
+            #Was not able to put this in a loop due to bad performance
             if (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
                 canJump = True
             else:
@@ -221,7 +229,7 @@ class Stage:
                 else:
                     player.fall(platforms[0].y_position, platforms[0].height, True)
 
-            self.window.display.fill((0, 0, 0))
+            self.window.display.blit(background, (0, 0))
 
             #Player and Boss health bars
             boss.status([680, 20])

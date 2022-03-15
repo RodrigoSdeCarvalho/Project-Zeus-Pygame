@@ -31,18 +31,6 @@ class MainMenu:
     @run.setter
     def run(self, run):
         self.__run = run
-    
-    # def open_play(self):
-    #     #play = Play()
-    #     pass
-
-    # def open_help(self):
-    #     #help = Help()
-    #     pass
-
-    # def open_settings(self):
-    #     #settings = Settings()
-    #     pass
 
     def quit(self):
         pygame.quit()
