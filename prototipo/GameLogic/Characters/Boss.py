@@ -13,32 +13,9 @@ class Boss(Character):
                         skill)
         self.__weak_point_x: weak_point_x
         self.__weak_point_y: weak_point_y
-        self.__x_position = x_position
-        self.__y_position = y_position
-        self.__speed = speed
-        self.__jump_height = jump_height
-        self.__sprites = sprites
         self.__counter = 0
-        self.window = surface
-        self.__hitbox_x = hitbox_x
-        self.__hitbox_y = hitbox_y
         self.__run_skill = True
-
-    @property
-    def x_position(self):
-        return self.__x_position
-    
-    @x_position.setter
-    def x_position(self, x_position):
-        self.__x_position = x_position
-
-    @property
-    def y_position(self):
-        return self.__y_position
-
-    @y_position.setter
-    def y_position(self, y_position):
-        self.__y_position = y_position
+        self.window = surface
 
     @property
     def weak_point_x(self):
@@ -56,10 +33,6 @@ class Boss(Character):
     def weak_point_y(self, weak_point_y):
         self.__weak_point_y = weak_point_y
         
-    @property
-    def sprites(self):
-        return self.__sprites
-
     @property
     def counter(self):
         return self.__counter
@@ -128,5 +101,5 @@ class Boss(Character):
     def draw(self):
         if self.health > 0:
             self.window.draw_scaled_image("prototipo\Images\qlue.png", 
-                        self.__hitbox_x, self.__hitbox_y, 
-                        self.__x_position, self.__y_position)
+                        self.hitbox_x, self.hitbox_y, 
+                        self.x_position, self.y_position)

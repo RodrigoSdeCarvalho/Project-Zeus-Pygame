@@ -9,7 +9,6 @@ class Play(Button):
         super().__init__(text, width, height, x, y, elevation, topColor, bottomColor)
         #self.screen = pygame.display.get_surface()
         self.__stage_list = [Stage(1, surface, False)]
-        self.window = surface
         self.surface = surface
 
     @property

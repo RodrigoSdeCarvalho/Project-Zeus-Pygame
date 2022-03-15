@@ -17,22 +17,16 @@ class Player(Character):
         self.__stamina = stamina
         self.__mana = mana
         self.__xp = xp
-        self.__x_position = x_position
-        self.__y_position = y_position
         self.__min_speed = speed
         self.__speed = speed
         self.__max_speed = speed * 2.5
-        self.__jump_height = jump_height
         self.__max_jump_height = jump_height
         self.__jumping = False
-        self.__sprites = sprites
-        self.window = surface
         self.__max_health = max_health
         self.falling_time = 0 
-        self.__hitbox_x = hitbox_x
-        self.__hitbox_y = hitbox_y
-        self.__facing = facing
         self.__attacking = False
+        self.__facing = facing
+        self.window = surface
 
     @property
     def max_health(self):
@@ -63,22 +57,6 @@ class Player(Character):
         self.__xp = xp
 
     @property
-    def x_position(self):
-        return self.__x_position
-    
-    @x_position.setter
-    def x_position(self, x_position):
-        self.__x_position = x_position
-
-    @property
-    def y_position(self):
-        return self.__y_position
-
-    @y_position.setter
-    def y_position(self, y_position):
-        self.__y_position = y_position
-
-    @property
     def min_speed(self):
         return self.__min_speed
 
@@ -103,14 +81,6 @@ class Player(Character):
         self.__max_speed = speed
 
     @property
-    def jump_height(self):
-        return self.__jump_height
-
-    @jump_height.setter
-    def jump_height(self, jump_height):
-        self.__jump_height = jump_height
-
-    @property
     def max_jump_height(self):
         return self.__max_jump_height
 
@@ -125,10 +95,6 @@ class Player(Character):
     @jumping.setter
     def jumping(self, jumping):
         self.__jumping = jumping
-        
-    @property
-    def sprites(self):
-        return self.__sprites
     
     @property
     def facing(self):
@@ -255,5 +221,5 @@ class Player(Character):
     def draw(self):
         if self.health > 0:
             self.window.draw_scaled_image("prototipo\Images\square.png", 
-                        self.__hitbox_x, self.__hitbox_y, 
-                        self.__x_position, self.__y_position)
+                        self.hitbox_x, self.hitbox_y, 
+                        self.x_position, self.y_position)

@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 import pygame
 
-#Alterar encapsulamento dos atributos
-#Mudar cursor do mouse ao dar hover sobre botao
 class Button(ABC):
-    def __init__(self, text: str, width: int, height: int, x: int, y: int, elevation: int, topColor: str, bottomColor: str):
+    def __init__(self, text: str, width: int, height: int, 
+                 x: int, y: int, elevation: int, topColor: str, 
+                 bottomColor: str):
         #Initial state and position of the button
         self.__pressed = False
         self.__elevation = elevation
