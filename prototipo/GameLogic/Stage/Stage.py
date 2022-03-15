@@ -52,6 +52,9 @@ class Stage:
 
         self.collision = Collision
 
+        self.__lose = pygame.transform.scale(pygame.image.load("prototipo/Images/lose_background.jpg"), (800, 600))
+        self.__win = pygame.transform.scale(pygame.image.load("prototipo/Images/win_background.jpg"), (800, 600))
+
     @property
     def index(self):
         return self.__index
@@ -111,6 +114,14 @@ class Stage:
     @property
     def backgrounds(self):
         return self.__backgrounds
+    
+    @property
+    def lose(self):
+        return self.__lose
+
+    @property
+    def win(self):
+        return self.__win
 
     def reset_stage(self):
         self.stage_completed = False
@@ -138,9 +149,9 @@ class Stage:
         run = True
 
         while run:
-            self.window.display.fill((100, 100, 100))
-            self.window.write_on_display("VITÓRIA", 50, [400, 250])
-            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
+            self.window.display.blit(self.win, (0, 0))
+            self.window.write_on_display("VITÓRIA", 50, [400, 300], ('#E1BC61'))
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350], ('#E1BC61'))
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -154,9 +165,9 @@ class Stage:
         run = True
         
         while run:
-            self.window.display.fill((100, 100, 100))
-            self.window.write_on_display("DERROTA", 50, [400, 250])
-            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350])
+            self.window.display.blit(self.lose, (0, 0))
+            self.window.write_on_display("DERROTA", 50, [400, 300], ('#FFD56D'))
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350], ('#FFD56D'))
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
