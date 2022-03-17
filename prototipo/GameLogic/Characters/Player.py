@@ -1,3 +1,4 @@
+from cgitb import reset
 from turtle import distance
 import pygame
 from GameLogic.Characters.Character import Character
@@ -16,20 +17,16 @@ class Player(Character):
         self.__stamina = stamina
         self.__mana = mana
         self.__xp = xp
-        self.__x_position = x_position
-        self.__y_position = y_position
         self.__min_speed = speed
         self.__speed = speed
         self.__max_speed = speed * 2.5
-        self.__jump_height = jump_height
         self.__max_jump_height = jump_height
-        self.__sprites = sprites
-        self.window = surface
+        self.__jumping = False
         self.__max_health = max_health
         self.falling_time = 0 
-        self.__hitbox_x = hitbox_x
-        self.__hitbox_y = hitbox_y
+        self.__attacking = False
         self.__facing = facing
+        self.window = surface
 
     @property
     def max_health(self):
@@ -60,22 +57,6 @@ class Player(Character):
         self.__xp = xp
 
     @property
-    def x_position(self):
-        return self.__x_position
-    
-    @x_position.setter
-    def x_position(self, x_position):
-        self.__x_position = x_position
-
-    @property
-    def y_position(self):
-        return self.__y_position
-
-    @y_position.setter
-    def y_position(self, y_position):
-        self.__y_position = y_position
-
-    @property
     def min_speed(self):
         return self.__min_speed
 
@@ -100,24 +81,20 @@ class Player(Character):
         self.__max_speed = speed
 
     @property
-    def jump_height(self):
-        return self.__jump_height
-
-    @jump_height.setter
-    def jump_height(self, jump_height):
-        self.__jump_height = jump_height
-
-    @property
     def max_jump_height(self):
         return self.__max_jump_height
 
     @max_jump_height.setter
     def max_jump_height(self, jump_height):
         self.__max_jump_height = jump_height
-        
+    
     @property
-    def sprites(self):
-        return self.__sprites
+    def jumping(self):
+        return self.__jumping
+    
+    @jumping.setter
+    def jumping(self, jumping):
+        self.__jumping = jumping
     
     @property
     def facing(self):
@@ -127,17 +104,39 @@ class Player(Character):
     def facing(self, facing):
         self.__facing = facing
 
-    def set_weapon_damage(self, xp):
-        pass
+    @property
+    def attacking(self):
+        return self.__attacking
 
-    def set_skill_damage(self, xp):
-        pass
+    @attacking.setter
+    def attacking(self, attacking):
+        self.__attacking = attacking
 
-    def lose(self):
-        pass
+    def movement(self, keys, canJump):
+        if keys[pygame.K_d]:
+            self.move_right()
 
-    def win(self):
-        pass
+        if keys[pygame.K_a]:
+            self.move_left()
+
+        if keys[pygame.K_LSHIFT]:
+            self.increase_speed()
+
+        if not keys[pygame.K_LSHIFT]:
+            self.decrease_speed()
+            
+        if not self.jumping:
+            if canJump or self.y_position == 540:
+                if keys[pygame.K_SPACE]:
+                    self.jumping = True
+        else:
+            finished = self.jump()
+            if finished:
+                self.jumping = False
+        
+        self.draw()
+
+        return self.jumping
     
     def move_left(self):
         if self.x_position >= 0:
@@ -157,11 +156,19 @@ class Player(Character):
     def decrease_speed(self):
         self.speed = self.min_speed
     
-    def attack(self):
-        stop = self.weapon.update(self.facing)
-        self.weapon.draw()
+    def attack(self, keys, attacked_boss, target, clock):
+        if not self.attacking:
+            if keys[pygame.K_e] and (clock % 5 == 0):
+                self.attacking = True
+        else:
+            finished = self.weapon.update(self.facing)
+            self.weapon.draw()
 
-        return stop
+            if attacked_boss:
+                self.weapon.hit(target)
+
+            if finished:
+                self.attacking = False
     
     def update_weapon_position(self):
         if self.facing == 'right':
@@ -172,7 +179,7 @@ class Player(Character):
     def jump(self):     
         if self.y_position >= 0:
             if self.jump_height >= 0:
-                self.y_position -= (self.jump_height * 4)
+                self.y_position -= self.jump_height * 2
                 self.jump_height -= 1
                 self.update_weapon_position()
             else:
@@ -186,7 +193,7 @@ class Player(Character):
             self.update_weapon_position()
             return True
 
-    def fall(self, collision = False):
+    def fall(self, reset_y_position = 0, reset_height = 0, collision = False):
         distance_floor = 600 - (self.y_position + self.hitbox_y)
         if distance_floor > 0:
             self.y_position += 2 * self.falling_time
@@ -196,12 +203,23 @@ class Player(Character):
             self.y_position = 540
             self.falling_time = 0
             self.update_weapon_position()
+            return True
         
         if collision:
             self.falling_time = 0
+            self.y_position = reset_y_position - reset_height - 5
             self.update_weapon_position()
+            return True
+        
+    def die(self):
+        if self.health <= 0:
+            self.health = 0
+            return True
+
+        return False
 
     def draw(self):
-        self.window.draw_scaled_image("prototipo\Images\pygame_player.png", 
-                    self.__hitbox_x, self.__hitbox_y, 
-                    self.__x_position, self.__y_position)
+        if self.health > 0:
+            self.window.draw_scaled_image("prototipo\Images\pygame_player.png", 
+                        self.hitbox_x, self.hitbox_y, 
+                        self.x_position, self.y_position)

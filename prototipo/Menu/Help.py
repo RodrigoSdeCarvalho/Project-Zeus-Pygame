@@ -17,9 +17,9 @@ class Help(Button):
         self.__tutorial_background = pygame.transform.scale(pygame.image.load("prototipo/Images/tutorial_background.png"), (800, 600))
         
         self.__tutorial_title_icon = pygame.transform.scale(pygame.image.load('prototipo/Images/tutorial_title_icon.png'), (40, 40))
-        self.__tutorial_title_text = title_font.render('Help', True, title_text_color)
+        self.__tutorial_title_text = title_font.render('Tutorial', True, title_text_color)
         self.__tutorial_title_rect = self.tutorial_title_text.get_rect()
-        self.tutorial_title_rect.left = 410
+        self.tutorial_title_rect.left = 400
         self.tutorial_title_rect.top = 30
 
         self.__tutorial_return = pygame.transform.scale(pygame.image.load('prototipo/Images/tutorial_return.png'), (15, 25))
@@ -183,7 +183,7 @@ class Help(Button):
 
         self.window.display.blit(self.tutorial_background, (0, 0))
         
-        self.window.display.blit(self.tutorial_title_icon, (350, 20))
+        self.window.display.blit(self.tutorial_title_icon, (320, 20))
         self.window.display.blit(self.tutorial_title_text, self.tutorial_title_rect)
 
         self.window.display.blit(self.tutorial_return, self.tutorial_return_rect)

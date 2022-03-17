@@ -10,10 +10,10 @@ class Character(ABC):
                 skill: Skill = "", weapon: Weapon = ""):
         self.__name = name
         self.__sprites = sprites
-        #self.__rect = self.sprites[0].get_rect() #AttributeError: 'str' object has no attribute 'get_rect'
         self.__health = health
         self.__max_health = max_health
-        #self.rect.center = (x_position, y_position)
+        self.__x_position = x_position
+        self.__y_position = y_position
         self.__hitbox_x = hitbox_x
         self.__hitbox_y = hitbox_y
         self.__speed = speed
@@ -37,14 +37,6 @@ class Character(ABC):
     def sprites(self, sprites):
         self.__sprites = sprites
 
-    #@property
-    #def rect(self):
-    #    return self.__rect
-
-    #@rect.setter
-    #def rect(self, rect):
-    #    self.__rect = rect
-
     @property
     def health(self):
         return self.__health
@@ -60,6 +52,22 @@ class Character(ABC):
     @max_health.setter
     def max_health(self, max_health):
         self.__max_health = max_health
+
+    @property
+    def x_position(self):
+        return self.__x_position
+    
+    @x_position.setter
+    def x_position(self, x_position):
+        self.__x_position = x_position
+
+    @property
+    def y_position(self):
+        return self.__y_position
+
+    @y_position.setter
+    def y_position(self, y_position):
+        self.__y_position = y_position
 
     @property
     def hitbox_x(self):
@@ -108,6 +116,11 @@ class Character(ABC):
     @weapon.setter
     def weapon(self, weapon):
         self.__weapon = weapon
+
+    def status(self, pos: list):
+        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], self.max_health/8.5, 10])
+        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], self.health/8.5, 10])
+        self.window.write_on_display(f"{self.name} {self.health}/{self.max_health}", 10, [pos[0] + 60, pos[1] + 5])
 
     def skill_attack(self, target):
         if self.health > 0:

@@ -1,5 +1,5 @@
+from doctest import ELLIPSIS_MARKER
 import pygame
-from time import sleep
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
@@ -7,6 +7,8 @@ from GameLogic.Characters.Weapon import Weapon
 from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
 from GameLogic.Stage.Map import Map
+from Difficulty.Difficulty import Difficulty
+from GameLogic.Stage.Collision import Collision
 
 #O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
 #fase tem esses objetos diferentes.
@@ -17,16 +19,21 @@ from GameLogic.Stage.Map import Map
 #objetos nas listas da create_stage_components.
 
 class Stage:
-    def __init__(self, level: int, difficulty: int, surface, stage_completed = False):
-        self.__level = level 
-        self.__difficulty = difficulty
+    def __init__(self, level: int, surface, stage_completed = False):
+        self.__level = level
         self.__stage_completed = stage_completed
         self.window = surface
 
         self.__index = self.__level - 1
 
-        self.__skills = [Skill("hit", 10, '', Player.x_position, Player.y_position, 0, 0, surface), 
-                            Skill("thunder", 150, '', 0, 0, 20, 20, surface)] 
+        self.__skills = [Skill("hit", 10, '', Player.x_position, 
+                               Player.y_position, 0, 0, surface), 
+                        Skill("thunder", 150*Difficulty().mode, 
+                              {'down': 'prototipo\Images\shunder0.png',
+                               'right': 'prototipo\Images\shunder90.png',
+                               'left': 'prototipo\Images\shunder270.png',
+                               'up': 'prototipo\Images\shunder180.png'},
+                              0, 0, 20, 30, surface)] 
 
         self.__weapons = []
 
@@ -46,6 +53,13 @@ class Stage:
                             Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
+
+        self.__backgrounds = [pygame.transform.scale(pygame.image.load("prototipo/Images/background_stage.jpg"), (800, 600))]
+
+        self.collision = Collision
+
+        self.__lose = pygame.transform.scale(pygame.image.load("prototipo/Images/lose_background.jpg"), (800, 600))
+        self.__win = pygame.transform.scale(pygame.image.load("prototipo/Images/win_background.jpg"), (800, 600))
 
     @property
     def index(self):
@@ -103,42 +117,20 @@ class Stage:
     def stage_completed(self, stage_completed):
         self.__stage_completed = stage_completed
 
-    def write_on_display(self,text, size, pos):
-        largeText = pygame.font.Font('freesansbold.ttf', size)
-        TextSurf = largeText.render(text, True, (0,0,0))
-        TextRect = TextSurf.get_rect()
-        TextRect.center = ((pos[0], pos[1]))
-        self.window.display.blit(TextSurf, TextRect)
+    @property
+    def backgrounds(self):
+        return self.__backgrounds
+    
+    @property
+    def lose(self):
+        return self.__lose
 
-    def status(self, object, pos:list):
-        pygame.draw.rect(self.window.display, (255,0,0), [pos[0], pos[1], object.max_health/10, 10])
-        pygame.draw.rect(self.window.display, (0,255,0),[pos[0], pos[1], object.health/10, 10])
-        self.write_on_display(f"{object.name} {object.health}/{object.max_health}", 10, [pos[0] + 45, pos[1] +5])
+    @property
+    def win(self):
+        return self.__win
 
-    def collision(self, object_1, object_2):
-        top_left_x_1 = object_1.x_position
-        top_left_y_1 = object_1.y_position
-        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
-        top_right_x_1 = object_1.x_position + object_1.hitbox_x
-
-        top_left_x_2 = object_2.x_position
-        top_left_y_2 = object_2.y_position
-        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
-        top_right_x_2 = object_2.x_position + object_2.hitbox_x
-
-        if bottom_left_y_1 <= top_left_y_2:
-            return False
-        
-        if top_left_y_1 >= bottom_left_y_2 :
-            return False
-
-        if top_right_x_1 <= top_left_x_2:
-            return False
-
-        if top_left_x_1 >= top_right_x_2:
-            return False
-
-        return True
+    def reset_stage(self):
+        self.stage_completed = False
     
     def pause(self):
         #p para pausar, c para continuar
@@ -153,9 +145,9 @@ class Stage:
                         paused = False
             
             #próximas linhas ainda não funcionam
-            self.window.display.fill((100, 100, 100))
-            self.write_on_display("Pausado", 15, [300, 300])
-            self.write_on_display("Pressione C para continuar",10, [400, 300])
+            self.window.display.fill(('#614933'))
+            self.window.write_on_display("Pausado", 30, [400, 270], ('#FFD56D'))
+            self.window.write_on_display("Pressione C para continuar", 20, [400, 320], ('#CF9158'))
             pygame.display.update()
     
     def vitoria(self):
@@ -163,25 +155,9 @@ class Stage:
         run = True
 
         while run:
-            self.window.display.fill((100, 100, 100))
-            self.write_on_display("VITÓRIA", 50, [400, 300])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
-            pygame.display.update()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYUP:
-                    run = False
-
-    def derrota(self):
-        self.stage_completed = False
-        run = True
-        
-        while run:
-            self.window.display.fill((100, 100, 100))
-            self.write_on_display("DERROTA", 50, [400, 300])
-            self.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 400])
+            self.window.display.blit(self.win, (0, 0))
+            self.window.write_on_display("VITÓRIA", 50, [400, 300], ('#E1BC61'))
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350], ('#E1BC61'))
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -190,51 +166,40 @@ class Stage:
                 if event.type == pygame.KEYDOWN:
                     run = False
 
-    def platform_collision(self, object_1, object_2): #Differs from the collision method because it affects how the player moves differently depending on  which side a collision is detected. 
-        top_left_x_1 = object_1.x_position
-        top_left_y_1 = object_1.y_position
-        bottom_left_y_1 = object_1.y_position + object_1.hitbox_y
-        top_right_x_1 = object_1.x_position + object_1.hitbox_x
-
-        top_left_x_2 = object_2.x_position
-        top_left_y_2 = object_2.y_position
-        bottom_left_y_2 = object_2.y_position + object_2.hitbox_y
-        top_right_x_2 = object_2.x_position + object_2.hitbox_x      
-
-        if bottom_left_y_1 == top_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player above platform
-            platform_collision_sides['up'] = True
-            return
-
-        if top_left_y_1 == bottom_left_y_2 and top_right_x_1 >= top_left_x_2 and top_left_x_1 <= top_right_x_2: #Player below platform
-            platform_collision_sides["down"] = True
-            return
-
-        if top_right_x_1 == top_left_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the left of the platform
-            platform_collision_sides["left"] = True
-            return
-
-        if top_left_x_1 == top_right_x_2 and bottom_left_y_1 <= top_left_y_2 and top_left_y_1 >= bottom_left_y_2: #Player on the right of the platform
-            platform_collision_sides["right"] = True
-            return
-
-        return
+    def derrota(self):
+        self.stage_completed = False
+        run = True
+        
+        while run:
+            self.window.display.blit(self.lose, (0, 0))
+            self.window.write_on_display("DERROTA", 50, [400, 300], ('#FFD56D'))
+            self.window.write_on_display("PRESSIONE QUALQUER BOTÃO", 30, [400, 350], ('#FFD56D'))
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    run = False
 
     def start(self):
-        global platform_collision_sides
-
         index = self.index
         player = self.players[index]
         boss = self.bosses[index]
         #weapon = self.weapons[index]
         #minion = self.minion[index]
+        background = self.backgrounds[index]
         platforms = self.platforms
-        map = self.maps[index]
 
         clock = 0
         play = True
-        boss_skill_run = True
-        player_attacking = False
-        jumping = False
+        skill_ground_collision = False
+        player_hit = False
+        attacked_boss = False
+        canJump = False
+
+        vitoria = False
+        derrota = False
 
         pygame.display.update()
         while play:
@@ -244,86 +209,82 @@ class Stage:
                     quit()
 
             keys = pygame.key.get_pressed()
-
-            platform_collision_sides = {"up": False, "down": False, "left": False, "right": False}
-
-            if keys[pygame.K_d] and not platform_collision_sides["left"]:
-                player.move_right()
-
-            if keys[pygame.K_a] and not platform_collision_sides["right"]:
-                player.move_left()
-
-            if keys[pygame.K_LSHIFT]:
-                player.increase_speed()
-
-            if not keys[pygame.K_LSHIFT]:
-                player.decrease_speed()
-
-            if not jumping:
-                if not (self.collision(platforms[0], player) or self.collision(platforms[1], player)):
-                    player.fall()
-                else:
-                    player.fall(True)
-                    player.y_position = platforms[0].y_position - platforms[0].height - 5
-
-                if keys[pygame.K_SPACE] and (self.collision(platforms[0], player) or self.collision(platforms[1], player) or player.y_position == 540):
-                    jumping = True
-            else:
-                finished = player.jump()
-                if finished:
-                    player.fall()
-                    jumping = False
-            
             if keys[pygame.K_p]:
                 self.pause() #p para pausar, c para continuar
+
+
+            #Game loop only tells Player Class what keys were pressed and if he can jump
+            #Player Class decides what movement happens based on key pressed
+            canFall = player.movement(keys, canJump)
+            pygame.display.update()
             
-            self.window.display.fill((0, 0, 0))
-            self.status(boss, [700, 0])
-            self.status(player, [0,0])
+            #Game loop tells Player Class what keys were pressed, if he hit the target, the target and the clock
+            player.attack(keys, attacked_boss, boss, clock)
+            pygame.display.update()
+
+            #If player dies he loses
+            derrota = player.die()
+
+            #Checks if the player's weapon hit the Boss
+            if self.collision.check(player.weapon, boss):
+                    attacked_boss = True
+            else:
+                attacked_boss = False
+
+            #Checks if player is above a platform
+            #If so he can jump
+            #Was not able to put this in a loop due to bad performance
+            if (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
+                canJump = True
+            else:
+                canJump = False
+
+            #If player is not jumping, he falls to a platform or to the ground
+            if not canFall:
+                if not (self.collision.check(platforms[0], player) or self.collision.check(platforms[1], player)):
+                    player.fall()
+                else:
+                    player.fall(platforms[0].y_position, platforms[0].height, True)
+
+            self.window.display.blit(background, (0, 0))
+
+            #Player and Boss health bars
+            boss.status([680, 20])
+            player.status([3, 20])
 
             for platform in platforms:
                 platform.draw() 
 
-            if boss.health > 0:
-                boss.move()
-                boss.draw()
+            #Boss movement and attacking
+            boss.move()
+            clock = boss.attack(skill_ground_collision, player, player_hit, clock)
 
-                if player.health > 0:
-                    if boss_skill_run and clock % (60 * 4):
-                        boss.skill.draw()
-                        boss.skill.move(player)
-                        if self.collision(boss.skill, player):
-                            boss.skill_attack(player)
-                            boss_skill_run = False
-
-                        if self.collision(boss.skill, platforms[0]) or self.collision(boss.skill, platforms[1]):
-                            boss_skill_run = False
-                    else:
-                        boss.skill_reset()
-
-                        if clock % (60) == 0:  
-                            clock = 0
-                            boss_skill_run = True
+            #Tells the boss if a collision with his skill and player occurred
+            if self.collision.check(boss.skill, player):
+                player_hit = True
             else:
-                self.vitoria()
-                play = False                   
-
-            if player.health > 0:    
-                player.draw()
+                player_hit = False
+            
+            #Tells the boss if a collision with his skill and a platform occurred
+            if self.collision.check(boss.skill, platforms[0]) or self.collision.check(boss.skill, platforms[1]):
+                skill_ground_collision = True
             else:
-                self.derrota()
+                skill_ground_collision = False
+
+            #If boss dies player wins
+            vitoria = boss.die()
+
+            #If player wins or loses game loop stops running
+            if vitoria or derrota:
                 play = False
 
-            if not player_attacking:
-                if keys[pygame.K_e] and clock % (10) == 0:
-                    player_attacking = True
-            else:
-                finished = player.attack()
-                if self.collision(player.weapon, boss):
-                    boss.health -= player.weapon.damage
-                if finished:
-                    player_attacking = False
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
             pygame.display.update()
+
+        #Shows winning or losing screens 
+        if vitoria:
+            self.vitoria()
+        if derrota:
+            self.derrota()
