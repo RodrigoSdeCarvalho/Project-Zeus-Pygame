@@ -26,11 +26,11 @@ class Stage:
         self.__skills = [Skill("hit", 10, '', Player.x_position, 
                                Player.y_position, 0, 0, surface), 
                         Skill("thunder", 150*Difficulty().mode, 
-                              {'down': 'prototipo\Images\shunder0.png',
-                               'right': 'prototipo\Images\shunder90.png',
-                               'left': 'prototipo\Images\shunder270.png',
-                               'up': 'prototipo\Images\shunder180.png'},
-                              0, 0, 20, 30, surface)] 
+                              {'down': 'prototipo\Images\pygame_raio_baixo.png',
+                               'right': 'prototipo\Images\pygame_raio_dir.png',
+                               'left': 'prototipo\Images\pygame_raio_esq.png',
+                               'up': 'prototipo\Images\pygame_raio_cima.png'},
+                              0, 0, 35, 45, surface)] 
 
         self.__weapons = []
 
@@ -40,11 +40,11 @@ class Stage:
         '''Adicionar mais players  aqui'''
         
         self.__players = [Player("Computatus", ["prototipo\Images\pygame_player.png"], 1000,
-                                 1000, 0, 540, 60, 60, 5, 16, self.skills[0],
+                                 1000, 0, 540, 40, 60, 5, 16, self.skills[0],
                                  Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), surface)]
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\pygame_boss.png"], 1000,
-                     1000, 200, 72, 120, 72, 1, 150, self.skills[1], surface)]
+                         1000, 200, 72, 120, 110, 1, 150, self.skills[1], surface)]
 
         self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface),
                             Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface)]

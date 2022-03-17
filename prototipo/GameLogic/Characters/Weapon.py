@@ -4,12 +4,12 @@ from pygame.math import Vector2
 class Weapon:
     def __init__(self, damage: int, sprite: str, x_position: int, y_position: int, surface):
         self.__damage = damage 
-        self.__sprite = pygame.transform.scale(pygame.image.load(sprite), (30, 70))
-        self.__original_sprite = pygame.transform.scale(pygame.image.load(sprite), (30, 70))
+        self.__sprite = pygame.transform.scale(pygame.image.load(sprite), (20, 60))
+        self.__original_sprite = pygame.transform.scale(pygame.image.load(sprite), (20, 60))
         self.__x_position = x_position
         self.__y_position = y_position
-        self.__hitbox_x = x_position + 30
-        self.__hitbox_y = y_position + 70
+        self.__hitbox_x = x_position + 20
+        self.__hitbox_y = y_position + 60
         self.__image_rect = self.sprite.get_rect(center=(self.x_position, self.y_position))
         self.__pos = Vector2((self.x_position, self.y_position))
         self.__offset = Vector2(5, -25)
