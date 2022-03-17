@@ -139,4 +139,8 @@ class Character(ABC):
             self.die()
 
     def die(self):
-        self.health = 0
+        if self.health <= 0:
+            self.health = 0
+            return True
+        
+        return False

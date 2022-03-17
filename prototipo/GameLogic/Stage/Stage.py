@@ -1,12 +1,9 @@
-from doctest import ELLIPSIS_MARKER
 import pygame
 from GameLogic.Characters.Player import Player
 from GameLogic.Characters.Boss import Boss
 from GameLogic.Characters.Skill import Skill
 from GameLogic.Characters.Weapon import Weapon
-from GameLogic.Characters.Minion import Minion
 from GameLogic.Stage.Platform import Platform
-from GameLogic.Stage.Map import Map
 from Difficulty.Difficulty import Difficulty
 from GameLogic.Stage.Collision import Collision
 
@@ -41,18 +38,15 @@ class Stage:
 
         self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
                                  1000, 0, 540, 60, 60, 3, 16, self.skills[0],
-                                 Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), 100, 100, 0, surface)]
+                                 Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), surface)]
  
         '''Adicionar mais players  aqui'''
 
         self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
-                     1000, 200, 72, 120, 72, 1, 150, self.skills[1],
-                     20, 60, surface)]
+                     1000, 200, 72, 120, 72, 1, 150, self.skills[1], surface)]
 
-        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface),
-                            Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
-
-        self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
+        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface),
+                            Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface)]
 
         self.__backgrounds = [pygame.transform.scale(pygame.image.load("prototipo/Images/background_stage.jpg"), (800, 600))]
 

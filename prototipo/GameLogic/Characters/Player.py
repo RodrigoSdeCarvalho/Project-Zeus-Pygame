@@ -9,28 +9,20 @@ class Player(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 
                 x_position: int, y_position: int, hitbox_x: int, 
                 hitbox_y: int, speed: int, jump_height: int, 
-                skill: Skill, weapon: Weapon, stamina: int, mana: int, xp: int, surface, facing: str = 'right'):
+                skill: Skill, weapon: Weapon, surface, facing: str = 'right'):
         super().__init__(name, sprites, health, max_health, 
                         x_position, y_position, hitbox_x, 
                         hitbox_y, speed, jump_height, 
                         skill, weapon)
-        self.__stamina = stamina
-        self.__mana = mana
-        self.__xp = xp
         self.__min_speed = speed
         self.__speed = speed
         self.__max_speed = speed * 2.5
         self.__max_jump_height = jump_height
         self.__jumping = False
-        self.__max_health = max_health
-        self.falling_time = 0 
+        self.__falling_time = 0 
         self.__attacking = False
         self.__facing = facing
         self.window = surface
-
-    @property
-    def max_health(self):
-        return self.__max_health
 
     @property
     def stamina(self):
@@ -96,6 +88,14 @@ class Player(Character):
     def jumping(self, jumping):
         self.__jumping = jumping
     
+    @property
+    def falling_time(self):
+        return self.__falling_time
+
+    @falling_time.setter
+    def falling_time(self, falling_time):
+        self.__falling_time = falling_time
+
     @property
     def facing(self):
         return self.__facing
@@ -210,13 +210,6 @@ class Player(Character):
             self.y_position = reset_y_position - reset_height - 5
             self.update_weapon_position()
             return True
-        
-    def die(self):
-        if self.health <= 0:
-            self.health = 0
-            return True
-
-        return False
 
     def draw(self):
         if self.health > 0:

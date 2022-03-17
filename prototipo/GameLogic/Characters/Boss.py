@@ -6,32 +6,14 @@ class Boss(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 
                 x_position: int, y_position: int, hitbox_x: int, 
                 hitbox_y: int, speed: int, jump_height: int, 
-                skill: Skill, weak_point_x: int, weak_point_y: int, surface):
+                skill: Skill, surface):
         super().__init__(name, sprites, health, max_health, 
                         x_position, y_position, hitbox_x, 
                         hitbox_y, speed, jump_height, 
                         skill)
-        self.__weak_point_x: weak_point_x
-        self.__weak_point_y: weak_point_y
         self.__counter = 0
         self.__run_skill = True
         self.window = surface
-
-    @property
-    def weak_point_x(self):
-        return self.__weak_point_x
-
-    @weak_point_x.setter
-    def weak_point_x(self, weak_point_x):
-        self.__weak_point_x = weak_point_x
-
-    @property
-    def weak_point_y(self):
-        return self.__weak_point_y
-
-    @weak_point_y.setter
-    def weak_point_y(self, weak_point_y):
-        self.__weak_point_y = weak_point_y
         
     @property
     def counter(self):
@@ -87,13 +69,6 @@ class Boss(Character):
                     return 0
         
         return clock
-
-    def die(self):
-        if self.health <= 0:
-            self.health = 0
-            return True
-        
-        return False
 
     def skill_reset(self):
         self.skill.reset(self.x_position, self.y_position + self.hitbox_y)

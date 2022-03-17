@@ -5,7 +5,7 @@ class GameDisplay:
         self.__width = 800
         self.__height = 600
         self.display = pygame.display.set_mode((self.__width, self.__height))
-        self.clock = clock
+        self.__clock = clock
 
     @property
     def width(self):
@@ -14,6 +14,10 @@ class GameDisplay:
     @property 
     def height(self):
         return self.__height
+    
+    @property
+    def clock(self):
+        return self.__clock
     
     def draw_image(self, image, x, y):
         img = pygame.image.load(image)

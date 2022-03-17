@@ -1,6 +1,6 @@
 class Platform:
     def __init__(self, x_position: int, y_position: int, hitbox_x: int, 
-                hitbox_y: int, sprite, width: int, height: int, color: str, surface):
+                hitbox_y: int, sprite: str, width: int, height: int, surface):
         self.__x_position = x_position
         self.__y_position = y_position
         self.__hitbox_x = hitbox_x
@@ -8,7 +8,6 @@ class Platform:
         self.__sprite = sprite
         self.__width = width
         self.__height = height
-        self.__color = color
         self.window = surface
 
     @property
@@ -62,14 +61,6 @@ class Platform:
     @height.setter
     def height(self, height):
         self.__height = height
-
-    @property
-    def color(self):
-        return self.__color
-
-    @color.setter
-    def color(self, color):
-        self.__color = color
 
     def draw(self): #Erro
         self.window.draw_scaled_image(self.__sprite, 
