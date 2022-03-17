@@ -75,6 +75,6 @@ class Boss(Character):
 
     def draw(self):
         if self.health > 0:
-            self.window.draw_scaled_image("prototipo\Images\qlue.png", 
+            self.window.draw_scaled_image("prototipo\Images\pygame_boss.png", 
                         self.hitbox_x, self.hitbox_y, 
                         self.x_position, self.y_position)

@@ -1,5 +1,3 @@
-from cgitb import reset
-from turtle import distance
 import pygame
 from GameLogic.Characters.Character import Character
 from GameLogic.Characters.Skill import Skill
@@ -213,6 +211,6 @@ class Player(Character):
 
     def draw(self):
         if self.health > 0:
-            self.window.draw_scaled_image("prototipo\Images\square.png", 
+            self.window.draw_scaled_image("prototipo\Images\pygame_player.png", 
                         self.hitbox_x, self.hitbox_y, 
                         self.x_position, self.y_position)
