@@ -86,6 +86,6 @@ class Boss(Character):
         self.skill.reset(self.x_position, self.y_position + self.hitbox_y)
 
     def draw(self):
-        self.window.draw_scaled_image("prototipo\Images\qlue.png", 
+        self.window.draw_scaled_image("prototipo\Images\pygame_boss.png", 
                     self.__hitbox_x, self.__hitbox_y, 
                     self.__x_position, self.__y_position)

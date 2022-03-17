@@ -32,13 +32,13 @@ class Stage:
 
         self.__minions = []
 
-        self.__players = [Player("Computatus", ["prototipo\Images\square.png"], 1000,
+        self.__players = [Player("Computatus", ["prototipo\Images\pygame_player.png"], 1000,
                                  1000, 0, 540, 60, 60, 5, 12, self.skills[0],
                                  Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), 100, 100, 0, surface)]
  
         '''Adicionar mais players  aqui'''
 
-        self.__bosses = [Boss("Zeus", ["prototipo\Images\zeus.png"], 1000,
+        self.__bosses = [Boss("Zeus", ["prototipo\Images\pygame_boss.png"], 1000,
                      1000, 200, 72, 120, 72, 1, 150, self.skills[1],
                      20, 60, surface)]
 

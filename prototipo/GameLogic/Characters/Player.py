@@ -202,6 +202,6 @@ class Player(Character):
             self.update_weapon_position()
 
     def draw(self):
-        self.window.draw_scaled_image("prototipo\Images\square.png", 
+        self.window.draw_scaled_image("prototipo\Images\pygame_player.png", 
                     self.__hitbox_x, self.__hitbox_y, 
                     self.__x_position, self.__y_position)
