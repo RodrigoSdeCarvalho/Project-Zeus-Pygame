@@ -131,8 +131,6 @@ class Player(Character):
             finished = self.jump()
             if finished:
                 self.jumping = False
-        
-        self.draw()
 
         return self.jumping
     
@@ -209,8 +207,17 @@ class Player(Character):
             self.update_weapon_position()
             return True
 
-    def draw(self):
+    def draw(self, sprite):
         if self.health > 0:
-            self.window.draw_scaled_image("prototipo\Images\pygame_player.png", 
+            self.window.draw_scaled_image(sprite, 
                         self.hitbox_x, self.hitbox_y, 
                         self.x_position, self.y_position)
+
+    def animation(self):
+        sprites = self.sprites
+
+        if self.facing == "right":
+            self.draw(sprites[0])
+        
+        if self.facing == "left":
+            self.draw(sprites[1])

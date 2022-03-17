@@ -7,14 +7,6 @@ from GameLogic.Stage.Platform import Platform
 from Difficulty.Difficulty import Difficulty
 from GameLogic.Stage.Collision import Collision
 
-#O int do level vai ser o index da lista com os objetos de Player, Boss etc, pois cada
-#fase tem esses objetos diferentes.
-
-#Se os componentes do stage, devido à diferença entre os stages, ficarem muito diferentes,
-#Será necessário fazer arquivos diferentes para componentes diferentes. Ex: lógica de duas
-#skills ficar muito diferente, rotina de mov dos bosses etc. Deve-se colocar esses novos 
-#objetos nas listas da create_stage_components.
-
 class Stage:
     def __init__(self, level: int, surface, stage_completed = False):
         self.__level = level
@@ -32,14 +24,9 @@ class Stage:
                                'up': 'prototipo\Images\pygame_raio_cima.png'},
                               0, 0, 35, 45, surface)] 
 
-        self.__weapons = []
-
-        self.__minions = []
-
- 
         '''Adicionar mais players  aqui'''
         
-        self.__players = [Player("Computatus", ["prototipo\Images\pygame_player.png"], 1000,
+        self.__players = [Player("Computatus", ["prototipo\Images\pygame_player.png", "prototipo\Images\pygame_player_esquerda.png"], 1000,
                                  1000, 0, 540, 40, 60, 5, 16, self.skills[0],
                                  Weapon(10, 'prototipo\Images\sword_0.png', 60, 80, surface), surface)]
 
@@ -128,7 +115,7 @@ class Stage:
         self.stage_completed = False
     
     def pause(self):
-        #p para pausar, c para continuar
+        #Press "p" to pause and "c" to continue.
         paused = True
         while paused:
             for event in pygame.event.get():
@@ -138,8 +125,7 @@ class Stage:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_c:
                         paused = False
-            
-            #próximas linhas ainda não funcionam
+
             self.window.display.fill(('#614933'))
             self.window.write_on_display("Pausado", 30, [400, 270], ('#FFD56D'))
             self.window.write_on_display("Pressione C para continuar", 20, [400, 320], ('#CF9158'))
@@ -181,8 +167,6 @@ class Stage:
         index = self.index
         player = self.players[index]
         boss = self.bosses[index]
-        #weapon = self.weapons[index]
-        #minion = self.minion[index]
         background = self.backgrounds[index]
         platforms = self.platforms
 
@@ -205,14 +189,14 @@ class Stage:
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_p]:
-                self.pause() #p para pausar, c para continuar
+                self.pause()
 
 
             #Game loop only tells Player Class what keys were pressed and if he can jump
             #Player Class decides what movement happens based on key pressed
             canFall = player.movement(keys, canJump)
             pygame.display.update()
-            
+
             #Game loop tells Player Class what keys were pressed, if he hit the target, the target and the clock
             player.attack(keys, attacked_boss, boss, clock)
             pygame.display.update()
@@ -242,6 +226,7 @@ class Stage:
                     player.fall(platforms[0].y_position, platforms[0].height, True)
 
             self.window.display.blit(background, (0, 0))
+            player.animation()
 
             #Player and Boss health bars
             boss.status([680, 20])
