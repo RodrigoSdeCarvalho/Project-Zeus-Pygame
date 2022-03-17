@@ -1,6 +1,3 @@
-from turtle import left
-
-
 class Skill:
     def __init__(self, name: str, damage: int, sprites: dict, x_position, y_position, hitbox_x, hitbox_y, surface):
         self.__name = name

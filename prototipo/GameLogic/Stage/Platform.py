@@ -62,8 +62,7 @@ class Platform:
     def height(self, height):
         self.__height = height
 
-    def draw(self): #Erro
+    def draw(self):
         self.window.draw_scaled_image(self.__sprite, 
                     self.__width, self.__height, 
                     self.__x_position, self.__y_position)
-    #Colocar plataforma apenas nas posições y = 150, 300 ou 450, devido ao jump = 150px

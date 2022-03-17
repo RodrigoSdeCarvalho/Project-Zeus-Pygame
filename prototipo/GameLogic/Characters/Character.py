@@ -129,9 +129,6 @@ class Character(ABC):
     def weapon_attack(self):
         self.weapon.attack()
 
-    #def jump(self):
-    #    self.rect.move_ip(0, self.jump_height)
-
     def take_damage(self, damage_taken):
         self.health -= damage_taken
 
