@@ -49,8 +49,8 @@ class Stage:
                      1000, 200, 72, 120, 72, 1, 150, self.skills[1],
                      20, 60, surface)]
 
-        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface),
-                            Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, "white", surface)]
+        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\pygame_plataforma.png", 250, 50, "white", surface),
+                            Platform(470, 350, 250, 50 , "prototipo\Images\pygame_plataforma.png", 250, 50, "white", surface)]
 
         self.__maps = [Map("prototipo\Images\olympus.png", self.__platforms[self.__index])]
 
