@@ -1,6 +1,5 @@
 import pygame
 
-from Menu.Button import Button
 from Menu.Help import Help
 from Menu.Settings import Settings
 from Menu.Play import Play

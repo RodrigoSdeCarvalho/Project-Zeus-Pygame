@@ -1,4 +1,3 @@
-import pygame
 from Menu.Button import Button
 from Difficulty.Difficulty import Difficulty
 

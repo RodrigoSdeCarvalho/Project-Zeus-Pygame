@@ -1,8 +1,5 @@
-import pygame
-
 from Menu.Button import Button
 from GameLogic.Stage.Stage import Stage
-from Difficulty.Difficulty import Difficulty
 
 class Play(Button):
     def __init__(self, text: str, width: int, height: int, x: int, y: int, elevation: int, topColor: str, bottomColor: str, surface):

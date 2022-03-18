@@ -1,6 +1,5 @@
 from GameLogic.Characters.Character import Character
 from GameLogic.Characters.Skill import Skill
-from GameLogic.Characters.Weapon import Weapon
 
 class Boss(Character):
     def __init__(self, name: str, sprites: list, health: int, max_health: int, 

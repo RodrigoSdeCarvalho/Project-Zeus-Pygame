@@ -1,5 +1,5 @@
 import pygame
-from abc import ABC, abstractmethod
+from abc import ABC
 from GameLogic.Characters.Skill import Skill
 from GameLogic.Characters.Weapon import Weapon
 
