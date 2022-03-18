@@ -168,9 +168,9 @@ class Player(Character):
     
     def update_weapon_position(self):
         if self.facing == 'right':
-            self.weapon.update_position(self.x_position + self.hitbox_x - 2, self.y_position + self.hitbox_y / 2 + 5)
+            self.weapon.update_position(self.x_position + self.hitbox_x - 5, self.y_position + self.hitbox_y / 2 + 5)
         else:
-            self.weapon.update_position(self.x_position + 2, self.y_position + self.hitbox_y / 2 + 5)
+            self.weapon.update_position(self.x_position + 5, self.y_position + self.hitbox_y / 2 + 8)
 
     def jump(self):     
         if self.y_position >= 0:

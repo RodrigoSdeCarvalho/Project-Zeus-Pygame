@@ -33,8 +33,8 @@ class Stage:
         self.__bosses = [Boss("Zeus", ["prototipo\Images\pygame_boss.png"], 1000,
                          1000, 200, 72, 120, 110, 1, 150, self.skills[1], surface)]
 
-        self.__platforms = [Platform(80, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface),
-                            Platform(470, 350, 250, 50 , "prototipo\Images\platform.png", 250, 50, surface)]
+        self.__platforms = [Platform(80, 350, 250, 45, "prototipo\Images\pygame_plataforma.png", 250, 45, surface),
+                            Platform(470, 350, 250, 45, "prototipo\Images\pygame_plataforma.png", 250, 45, surface)]
 
         self.__backgrounds = [pygame.transform.scale(pygame.image.load("prototipo/Images/background_stage.jpg"), (800, 600))]
 
@@ -191,11 +191,9 @@ class Stage:
             if keys[pygame.K_p]:
                 self.pause()
 
-
             #Game loop only tells Player Class what keys were pressed and if he can jump
             #Player Class decides what movement happens based on key pressed
             canFall = player.movement(keys, canJump)
-            pygame.display.update()
 
             #Game loop tells Player Class what keys were pressed, if he hit the target, the target and the clock
             player.attack(keys, attacked_boss, boss, clock)
@@ -226,18 +224,18 @@ class Stage:
                     player.fall(platforms[0].y_position, platforms[0].height, True)
 
             self.window.display.blit(background, (0, 0))
-            player.animation()
-
-            #Player and Boss health bars
-            boss.status([680, 20])
-            player.status([3, 20])
-
             for platform in platforms:
                 platform.draw() 
 
             #Boss movement and attacking
             boss.move()
             clock = boss.attack(skill_ground_collision, player, player_hit, clock)
+
+            player.animation()
+
+            #Player and Boss health bars
+            boss.status([680, 20])
+            player.status([3, 20])
 
             #Tells the boss if a collision with his skill and player occurred
             if self.collision.check(boss.skill, player):
@@ -257,7 +255,6 @@ class Stage:
             #If player wins or loses game loop stops running
             if vitoria or derrota:
                 play = False
-
 
             clock += 1
             pygame.time.delay(10) #Define a velocidade do loop.
