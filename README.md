@@ -16,4 +16,4 @@ Aqui vai um exemplo de TODO list contendo as etapas.
 - [x] Diagramas UML (18-dez-2021)
 - [x] Interface Gráfica (13-fev-2022)
 - [x] Protótipo do jogo (13-fev-2022)
-- [ ] Versão final com relatório e vídeo (13-mar-2022)
+- [x] Versão final com relatório e vídeo (13-mar-2022)
